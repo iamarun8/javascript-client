@@ -2,11 +2,7 @@ body {
     background-image: url('../../images/background.jpg');
     border: transparent solid 1px;
   }
-  img {
-    width: 29%;
-    margin: 1px;
-  }
-
+  
   .co-container {
     display: flex;
     flex-direction: column;
@@ -56,37 +52,40 @@ body {
   .co-flex--payment {
     display: flex;
     flex: 4;
-    height: 100%;
     flex-direction: column;
     background-color:white;
   }
-
+  
   .co-wallet{
     padding-top: 2%;
     flex: 1;
     height: 40%;
   }
+  .co-hover{
+    display: inline-block;
+    margin: 20px;
+  }
   
+  img {
+    width: 70%;
+  }
+  .co-hover:hover {
+    box-shadow: 0 0 0 7px lightgray;
+    background-color: lightgray;
+  }
   .co-flex--img {
-    margin-left: 1%;
-    margin-right: -5%;
-    margin-top: 5%;
+    display: inline-flex;
+    margin-top: 20px;
   }
-  .co-img--wallet {
-    border: 1px solid grey;
-    border-radius: 4px;
-    padding: 1px;
-    
-  }
-  
   .co-img--wallet:hover {
     opacity: .5;
   }
+  .co-img--wallet {
+    margin-left: 25px;
+  }
   .co-caption {
-    margin-top: 0px;
-    margin-left: 20%;
-    text-align: left;
     font-size: small;
+    margin-left: 25px;
   }
     
   .co-newCard{
