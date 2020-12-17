@@ -22,7 +22,8 @@ body {
   .co-item--checkout {
     flex: 1;
     display: flex;
-    margin-top: 16px;
+    margin-top: 15px;
+    margin-left: 10px;;
     margin-right: 0.2%;
     justify-content: space-between;
   }
@@ -32,7 +33,7 @@ body {
   }
   ul.co-breadcrumb li {
     display: inline;
-    font-size: 15px;
+    font-size: 17px;
   }
   ul.co-breadcrumb li+li:before {
     padding: 8px;
@@ -51,15 +52,13 @@ body {
   }
   .co-flex--payment {
     display: flex;
-    flex: 4;
+    flex: 3;
     flex-direction: column;
     background-color:white;
   }
   
-  .co-wallet{
-    padding-top: 2%;
-    flex: 1;
-    height: 40%;
+  .co-wallet p{
+    margin-left: 10px;
   }
   .co-hover{
     display: inline-block;
@@ -87,7 +86,11 @@ body {
     font-size: small;
     margin-left: 25px;
   }
-    
+  
+  .co-newcard-p p {
+    margin-left: 10px;
+  }
+
   .co-newCard{
     max-width: 350px;
     margin: 10px;
@@ -149,10 +152,11 @@ body {
     flex-direction: row;
     flex: 2;
   }
-    .co-product {
-      flex: 1;
-      }
-    .co-item--image {
+  .co-product {
+    flex: 1;
+  }
+
+  .co-item--image {
     margin-top: 2px;
     border: 5px solid grey;
     width: 50px;
@@ -228,7 +232,7 @@ body {
     flex: 1;
   }
   .co-cartbackground{
-    flex: 2;
+    flex: 1;
   }
 }
 @media screen and (max-width:600px){
