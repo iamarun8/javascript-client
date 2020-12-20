@@ -1,20 +1,20 @@
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-import { render, screen, within } from "@testing-library/react";
-import React from 'react';
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/This is Disabled Input/i);
+  expect(linkElement).toBeInTheDocument();
+});
 
-test("pass functions to matchers", () => {
-  const Hello = () => (
-    <div>
-      Hello <span>world</span>
-    </div>
-  );
-  render(<Hello />);
-  screen.getByText((content, node) => {
-    const hasText = (node) => node.textContent === "Hello world";
-    const nodeHasText = hasText(node);
-    const childrenDontHaveText = Array.from(node.children).every(
-      (child) => !hasText(child)
-    );
-    return nodeHasText && childrenDontHaveText;
-  });
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/A Valid Input/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/An Input with errors/i);
+  expect(linkElement).toBeInTheDocument();
 });
