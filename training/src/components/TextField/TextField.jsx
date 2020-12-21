@@ -1,5 +1,6 @@
 import React from 'react';
 import * as style from './style';
+import PropTypes from 'prop-types';
 
 function TextField(props) {
     const { disabled, value, error } = props;
@@ -8,8 +9,8 @@ function TextField(props) {
         // console.log('--------------------end of disabled-------------------------');
         return (
             <>
-                <h2>This is Disabled Input</h2>
-                <input style={style.disableInput} type="text" defaultValue="Disabled Input" disabled />
+                <h2 style={style.h}>This is Disabled Input</h2>
+                <input style={style.disableInput} type="text" defaultValue="Disabled Input" disabled={disabled} />
             </>
         );
     }
@@ -18,8 +19,8 @@ function TextField(props) {
         // console.log('--------------------end of value-------------------------');
         return (
             <>
-                <h2>A Valid Input</h2>
-                <input style={style.validInput} type="text" defaultValue={props.value} />
+                <h2 style={style.h}>A Valid Input</h2>
+                <input style={style.validInput} type="text" defaultValue={value} />
             </>
         );
     }
@@ -28,11 +29,23 @@ function TextField(props) {
         // console.log('--------------------end of error-------------------------');
         return (
             <>
-                <h2>An Input with errors</h2>
+                <h2 style={style.h}>An Input with errors</h2>
                 <input style={style.error} type="text" defaultValue="101" />
                 <p style={{ color: 'red' }}> Could not be greater than </p>
             </>
         );
     }
 }
+
+TextField.propTypes = {
+    disabled: PropTypes.bool,
+    value: PropTypes.string,
+    error: PropTypes.string,
+};
+TextField.defaultProps = {
+    disabled: '',
+    value: '',
+    error: '',
+};
+
 export default TextField;

@@ -1,19 +1,24 @@
-export const inputTag = {
-    width: '98%',
+export const Box = {
+    width: '100%',
     padding: '10px',
+    overflow: 'hidden'
 };
 
+export const h = {
+    margin: '5px'
+}
+
 export const disableInput = {
-    ...inputTag,
+    ...Box,
     color: 'grey',
 };
 
 export const validInput = {
-    ...inputTag,
+    ...Box,
     border: '2px solid grey',
 };
 
 export const error = {
-    ...inputTag,
+    ...Box,
     border: '2px solid red',
 };
