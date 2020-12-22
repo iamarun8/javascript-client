@@ -31,14 +31,12 @@ class Slider extends Component {
 
     render() {
         const { current } = this.state;
-        const {
-            altText, height, duration, banner, defaultbanner,
-        } = this.props;
-        const src = (current === -1 || banner.length === 0) ? `${PUBLIC_IMAGE_FOLDER}${defaultbanner}` : `${PUBLIC_IMAGE_FOLDER}${banner[current]}`;
+        const { altText, height, duration, banner, defaultbanner } = this.props;
+        const imageslider = (current === -1 || banner.length === 0) ? `${PUBLIC_IMAGE_FOLDER}${defaultbanner}` : `${PUBLIC_IMAGE_FOLDER}${banner[current]}`;
         return (
             <>
                 <div align="center">
-                    <img src={src} alt={altText} height={height} duration={duration} />
+                    <img src={imageslider} alt={altText} height={height} duration={duration} />
                 </div>
             </>
         );

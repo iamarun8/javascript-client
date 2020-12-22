@@ -30,7 +30,7 @@ function TextField(props) {
         return (
             <>
                 <h2 style={style.h}>An Input with errors</h2>
-                <input style={style.error} type="text" defaultValue="101" />
+                <input style={style.error} type="text" defaultValue={error} />
                 <p style={{ color: 'red' }}> Could not be greater than </p>
             </>
         );
