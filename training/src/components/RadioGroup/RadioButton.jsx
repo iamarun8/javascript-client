@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Input } from './style';
 
 function RadioButton(props) {
-    const {
-        error, onChange, options,
-    } = props;
+    const {error, onChange, options} = props;
     return (
         <>
             { options && options.length && options.map(({ value, label }) => (

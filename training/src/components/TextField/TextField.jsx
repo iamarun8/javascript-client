@@ -7,13 +7,13 @@ const TextField = (props) => {
     if (error) {
         return (
             <>
-                <Input type="text" value={value} error onChange={onChange} />
+                <Input type="text" value={value} error={error} onChange={onChange} />
                 <Error>{error}</Error>
             </>
         );
     }
     return (
-        <Input type="text"  onChange={onChange} />
+        <Input type="text" error={error} onChange={onChange} />
     );
 };
 
