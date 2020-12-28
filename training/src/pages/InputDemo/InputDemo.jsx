@@ -131,8 +131,8 @@ class InputDemo extends React.Component {
                         }
                     </div>
                     <div>
-                        <ButtonField value="Cancel" onClick={this.handleClick} />
-                        <ButtonField value="Submit" disabled={this.hasErrors()} onClick={this.handleClick} />
+                        <ButtonField value="Cancel" onClick={()=>{}} />
+                        <ButtonField value="Submit" disabled={this.hasErrors()} onClick={()=>{}} />
                     </div>
                 </div>
             </>

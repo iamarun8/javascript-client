@@ -14,7 +14,7 @@ const TextField = (props) => {
         );
     }
     return (
-        <Input type="text" error={error} onChange={onChange} />
+        <Input type="text" error={error} onChange={onChange} onBlur={onBlur} />
     );
 };
 
