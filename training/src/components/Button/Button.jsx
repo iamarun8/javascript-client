@@ -25,7 +25,7 @@ ButtonField.propTypes = {
     disabled: PropTypes.bool,
     style: PropTypes.objectOf(PropTypes.string),
     value: PropTypes.string.isRequired,
-    onClick: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 ButtonField.defaultProps = {
     color: 'default' || 'primary',

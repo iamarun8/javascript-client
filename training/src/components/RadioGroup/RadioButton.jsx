@@ -22,7 +22,7 @@ RadioButton.propTypes = {
     error: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.arrayOf(PropTypes.object),
-    onBlur: PropTypes.string.isRequired
+    onBlur: PropTypes.func.isRequired
 };
 RadioButton.defaultProps = {
     error: '',

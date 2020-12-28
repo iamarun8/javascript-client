@@ -30,15 +30,6 @@ class InputDemo extends React.Component {
         };
     }
 
-    handleBlur = (field) => () => {
-        const { touched } = this.state;
-        touched[field] = true;
-
-        this.setState({
-            touched,
-        }, () => this.getError());
-    }
-
     handleNameChange = (e) => {
         this.setState({ name: e.target.value }, () => {
             console.log(this.state);
@@ -78,7 +69,7 @@ class InputDemo extends React.Component {
                 return err.message;
             }
         }
-        return true;
+        return ' '
     };
 
     hasErrors = () => {
@@ -100,9 +91,12 @@ class InputDemo extends React.Component {
         });
     }
 
+    handleClick() {
+        console.log('Click happened');
+    }
+
     render() {
         const { sport } = this.state;
-        console.log('hasErr', this.hasErrors());
         return (
             <>
                 <div>
@@ -137,8 +131,8 @@ class InputDemo extends React.Component {
                         }
                     </div>
                     <div>
-                        <ButtonField value="Cancel" onClick />
-                        <ButtonField value="Submit" disabled={this.hasErrors()} onClick />
+                        <ButtonField value="Cancel" onClick={this.handleClick} />
+                        <ButtonField value="Submit" disabled={this.hasErrors()} onClick={this.handleClick} />
                     </div>
                 </div>
             </>
