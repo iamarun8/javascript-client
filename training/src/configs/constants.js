@@ -11,3 +11,46 @@ export const Banner = [
 ];
 
 export const total = 5;
+
+export const selectitem = [
+    {
+        label: "Cricket",
+        value: "cricket",
+    },
+    {
+        label: "FootBall",
+        value: "football",
+    },
+];
+
+
+export const Cric = [
+    {
+        label: "Wicket Keeper",
+        value: "wicket keeper",
+    },
+    {
+        label: "Batsman",
+        value: "batsman",
+    },
+    {
+        label: "Bowler",
+        value: "bowler",
+    },
+    {
+        label: "All Rounder",
+        value: "all Rounder",
+    },
+];
+
+export const Foot = [
+    {
+        label: "Defender",
+        value: "defender",
+    },
+    {
+        label: "Striker",
+        value: "striker",
+    },
+    
+];
