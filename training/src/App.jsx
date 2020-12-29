@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { InputDemo } from './pages';
+import { ChildrenDemo } from './pages/ChildrenDemo';
+import { ThemeProvider } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography';
+
+import theme from './theme'
 
 class App extends Component {
   render() {
     return (
-      <InputDemo />
+      <ThemeProvider theme={theme}>
+        <Typography><ChildrenDemo /></Typography>
+      </ThemeProvider>
     );
   }
 }
