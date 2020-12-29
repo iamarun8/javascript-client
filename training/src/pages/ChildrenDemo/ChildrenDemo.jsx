@@ -4,13 +4,18 @@ import Math from '../../components/Math/Math';
 import Theme from '../../theme';
 
 class ChildrenDemo extends React.Component {
+    Result() {
+        let { result } = this.state;
+        result = '';
+        this.setState({ result });
+    }
     render() {
         return (
             <>
                 <ThemeProvider theme={Theme} />
                 <Math first={7} second={4} operator="+">
                     {
-                        (first, second, result, operator) => ( <p> Sum of {first} and {second} is equal to {result} </p> )
+                        (first, second, result) => ( <p> Sum of {first} and {second} is equal to {result} </p> )
                     }
                 </Math>
                 <Math first={7} second={3} operator="-">

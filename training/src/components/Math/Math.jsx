@@ -2,12 +2,7 @@ import PropTypes from 'prop-types';
 
 const Math = (props) => {
     const { first, second, operator, children } = props;
-    let { result } = props;
-    console.log('result', result);
-    console.log('childern', children);  
-    console.log('first',first);  
-    console.log('second', second );  
-
+    let { result } = props; 
 
     switch (operator) {
         case '+': result = first + second;
@@ -25,13 +20,30 @@ const Math = (props) => {
     if (children) {
         return children(first, second, result);
     }
+
+    return (
+        <>
+            <p>
+                {' '}
+                {first}
+                {' '}
+                {operator}
+                {' '}
+                {second}
+                {' '}
+        =
+        {' '}
+                {result}
+                {' '}
+            </p>
+        </>
+    );
 };
 Math.propTypes = {
     first: PropTypes.number.isRequired,
     second: PropTypes.number.isRequired,
     operator: PropTypes.string.isRequired,
     children: PropTypes.func,
-    result: PropTypes.number.isRequired,
 };
 Math.defaultProps = {
     children: undefined,
