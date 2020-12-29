@@ -3,29 +3,28 @@ import PropTypes from 'prop-types';
 import { Error, Input } from './style';
 
 const TextField = (props) => {
-    const { value, error, onChange } = props;
+    const { value, error, onChange, onBlur} = props;
+    console.log("error",error)
     if (error) {
         return (
             <>
-                <Input type="text" value={value} error={error} onChange={onChange} />
+                <Input type="text" onBlur={onBlur} value={value} error={error} onChange={onChange} />
                 <Error>{error}</Error>
             </>
         );
     }
     return (
-        <Input type="text" error={error} onChange={onChange} />
+        <Input type="text" error={error} onChange={onChange} onBlur={onBlur} />
     );
 };
 
 export default TextField;
 TextField.propTypes = {
-    value: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
     error: PropTypes.string,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired
 };
 TextField.defaultProps = {
     disabled: false,
     error: '',
-    onChange: '',
 };

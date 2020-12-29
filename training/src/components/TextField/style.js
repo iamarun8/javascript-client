@@ -14,8 +14,8 @@ border-radius: 5px;
 color: solid gray;
 ${(props) => props.error
         && css`
-border: 1px solid red;
-color: red;
+border: 1px solid gray;
+color: black;
 `};
 }
 ${(props) => (props.value && !props.disabled && !props.error)
