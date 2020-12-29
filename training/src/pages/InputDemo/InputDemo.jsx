@@ -69,7 +69,7 @@ class InputDemo extends React.Component {
                 return err.message;
             }
         }
-        return ' '
+        return ''
     };
 
     hasErrors = () => {
