@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
-import { ChildrenDemo } from './pages/ChildrenDemo';
-import { ThemeProvider } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
+import Trainee from './pages/Trainee/Trainee';
 
-import theme from './theme'
+import theme from './theme';
 
-class App extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <Typography><ChildrenDemo /></Typography>
-      </ThemeProvider>
-    );
-  }
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Trainee />
+    </ThemeProvider>
+  );
 }
 
 export default App;
