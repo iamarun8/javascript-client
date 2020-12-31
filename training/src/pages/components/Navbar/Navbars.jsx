@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        marginBlockEnd: 10,
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ButtonAppBar() {
+export default function Navbar() {
     const classes = useStyles();
 
     return (
@@ -25,8 +26,8 @@ export default function ButtonAppBar() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Trainee
-          </Typography>
+                        Trainee Portal
+                </Typography>
                     <Button color="inherit">Trainee</Button>
                     <Button color="inherit">TextfieldDemo</Button>
                     <Button color="inherit">InputDemo</Button>
