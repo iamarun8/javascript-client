@@ -5,6 +5,7 @@ import { ButtonField } from '../../components/Button';
 import RadioButton from '../../components/RadioGroup/RadioButton';
 import { SelectField } from '../../components/SelectField'
 import { Cric, Foot, selectitem } from '../../configs/constants'
+import { Navbar } from '../../layouts/components/Navbar'
 
 class InputDemo extends React.Component {
     schema = yup.object().shape({
@@ -99,6 +100,7 @@ class InputDemo extends React.Component {
         const { sport } = this.state;
         return (
             <>
+                <Navbar />
                 <div>
                     <p><b>Name:</b></p>
                     <TextField
