@@ -2,12 +2,10 @@ import React from 'react';
 import { TextField } from '../../components';
 import { Slider } from '../../components/Slider';
 import { banners, DEFAULT_BANNER_IMAGE } from '../../configs/constants';
-import { Navbar } from '../../layouts/components/Navbar';
 
 function TextFieldDemo() {
     return (
         <>
-            <Navbar />
             <div style={{ backgroundColor: 'lightgray', width: '100%'}}>
                 <Slider alt="No Image" duration={2000} height={200} random banner={banners} defaultbanner={DEFAULT_BANNER_IMAGE} />
             </div>
