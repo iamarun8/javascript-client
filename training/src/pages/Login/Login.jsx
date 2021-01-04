@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TextField, Button, InputAdornment, CardContent, Typography, Card, Avatar, CssBaseline, withStyles, } from '@material-ui/core';
 import { Email, VisibilityOff, LockOutlined } from '@material-ui/icons';
 import * as yup from 'yup';
+import { Footer } from '../../layouts/components/Footer'
 
 const LoginStyle = (theme) => ({
     main: {
@@ -136,6 +137,7 @@ class Login extends React.Component {
                             </form>
                         </CardContent>
                     </Card>
+                    <Footer />
                 </div>
             </>
         );

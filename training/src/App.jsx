@@ -1,19 +1,26 @@
 import React from 'react';
-import { ThemeProvider } from '@material-ui/core/styles';
-import Trainee from './pages/Trainee/Trainee';
-import { Navbar } from './pages/components/Navbar'
-import { Login } from './pages/Login'
+import { BrowserRouter as Router, Route, Switch,} from 'react-router-dom';
+import {Login, InputDemo, ChildrenDemo, Trainee, TextFieldDemo,NoMatch,} from './pages';
+import { AuthRoute, PrivateRoute } from './routes/index';
 
-import theme from './theme';
+class App extends React.Component {
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            <AuthRoute component={Trainee} />
+          </Route>
+          <PrivateRoute path="/login" component={Login} />
+          <AuthRoute path="/text-field" component={TextFieldDemo} />
+          <AuthRoute path="/childrenDemo" component={ChildrenDemo} />
+          <AuthRoute path="/inputDemo" component={InputDemo} />
+          <AuthRoute component={NoMatch} />
 
-function App() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Navbar />
-      <Trainee />
-      <Login />
-    </ThemeProvider>
-  );
+        </Switch>
+      </Router>
+    );
+  }
 }
 
 export default App;
