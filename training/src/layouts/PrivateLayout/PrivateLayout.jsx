@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Footer } from '../components/index';
 
 const PrivateLayout = ({ children, ...rest }) => (
-    <div className="main">{children}</div>
+    <div>
+        <div className="main">{children}</div>
+  &nbsp;
+        <Footer />
+    </div>
 );
 
 PrivateLayout.propTypes = {
