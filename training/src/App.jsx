@@ -9,7 +9,6 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route path="/" exact>
-            {/* <AuthRoute component={Trainee} /> */}
             <Redirect to="/trainee" />
           </Route>
           <PrivateRoute path="/login" component={Login} />

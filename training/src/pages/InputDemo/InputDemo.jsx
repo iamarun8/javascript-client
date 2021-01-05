@@ -91,10 +91,6 @@ class InputDemo extends React.Component {
         });
     }
 
-    handleClick() {
-        console.log('Click happened');
-    }
-
     render() {
         const { sport } = this.state;
         return (

@@ -11,7 +11,7 @@ const AuthLayout = ({ children, ...rest }) => (
 );
 
 AuthLayout.propTypes = {
-    children: PropTypes.objectOf(PropTypes.string).isRequired,
+    children: PropTypes.object.isRequired,
 };
 
 export default AuthLayout;

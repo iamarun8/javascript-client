@@ -4,7 +4,6 @@ import { Error, Input } from './style';
 
 const TextField = (props) => {
     const { value, error, onChange, onBlur} = props;
-    console.log("error",error)
     if (error) {
         return (
             <>
@@ -25,6 +24,6 @@ TextField.propTypes = {
     onBlur: PropTypes.func.isRequired
 };
 TextField.defaultProps = {
-    disabled: false,
+    disabled: true,
     error: '',
 };
