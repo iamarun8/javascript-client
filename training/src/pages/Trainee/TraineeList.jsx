@@ -44,7 +44,7 @@ class TraineeList extends React.Component {
 
     render() {
         const { open } = this.state;
-        const { match: { url }, classes } = this.props;
+        const { match: { url }, classes} = this.props;
         return (
             <>
                 <div className={classes.root}>
@@ -53,7 +53,7 @@ class TraineeList extends React.Component {
                             ADD TRAINEELIST
                         </Button>
                     </div>
-                    <AddDialog open={open} onClose={this.handleClose} onSubmit={() => this.handleSubmit} />
+                    <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
                     &nbsp;
                     &nbsp;
                     <TableComponent
@@ -88,7 +88,7 @@ class TraineeList extends React.Component {
     }
 }
 TraineeList.propTypes = {
-    match: PropTypes.objectOf(PropTypes.object).isRequired,
+    match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 export default withStyles(useStyles)(TraineeList);

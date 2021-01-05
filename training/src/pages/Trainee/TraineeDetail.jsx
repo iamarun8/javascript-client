@@ -61,7 +61,7 @@ function TraineeDetail(props) {
                         <Typography component="h5" variant="h5">
                             {traineeData.name}
                         </Typography>
-                        <Typography component="subtitle1" color="textSecondary">
+                        <Typography color="textSecondary">
                             {getDateFormatted()}
                         </Typography>
                         <Typography component="h6" variant="h6">
@@ -77,7 +77,7 @@ function TraineeDetail(props) {
     );
 }
 TraineeDetail.propTypes = {
-    match: PropTypes.objectOf(PropTypes.object).isRequired,
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    match: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 export default withStyles(style)(TraineeDetail);

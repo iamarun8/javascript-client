@@ -62,6 +62,7 @@ class AddDialog extends React.Component {
         confirmPassword: false,
       },
     };
+    this.baseState = this.state;
   }
 
   handleChange = (key) => ({ target: { value } }) => {
@@ -75,6 +76,12 @@ class AddDialog extends React.Component {
       return true;
     }
     return false;
+  }
+
+  handleCancel = () => {
+    const { onClose } = this.props;
+    onClose();
+    this.setState(this.baseState);
   }
 
   getError = (field) => {
@@ -165,7 +172,7 @@ class AddDialog extends React.Component {
             </div>
         &nbsp;
             <div align="right">
-              <Button onClick={onClose} color="primary">CANCEL</Button>
+              <Button onClick={this.handleCancel} color="primary">CANCEL</Button>
               <Button variant="contained" color="primary" disabled={this.hasErrors()} onClick={() => onSubmit({ name, email, password })}>SUBMIT</Button>
             </div>
           </DialogContent>
