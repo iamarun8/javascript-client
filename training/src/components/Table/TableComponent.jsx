@@ -22,19 +22,19 @@ function TableComponent(props) {
                     <TableRow>
                         {
                             column.map(({ align, label }) => (
-                                <TableCell className={classes.header} align={align}>{label}</TableCell>
+                                <TableCell key={label} className={classes.header} align={align}>{label}</TableCell>
                             ))
                         }
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map(({ name, email }) => (
-                        <TableRow>
-                            <TableCell align={column[0].align}>
+                    {data.map(({ name, email }, index ) => (
+                        <TableRow key={`tableRow${index}` }>
+                            <TableCell key={`tableCell1_${index}` } align={column[0].align}>
                                 {name}
                             </TableCell>
-                            <TableCell>{email}</TableCell>
-                        </TableRow>
+                            <TableCell key={`tableCell2_${index}` } >{email}</TableCell>
+                        </TableRow >
                     ))}
                 </TableBody>
             </Table>
