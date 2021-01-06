@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { AddDialog } from './components/AddDialog';
@@ -21,6 +20,9 @@ class TraineeList extends React.Component {
         super(props);
         this.state = {
             open: false,
+            selected: '',
+            order: 'asc',
+            orderBy: '',
         };
     }
 
@@ -42,9 +44,22 @@ class TraineeList extends React.Component {
         });
     }
 
+    handleSort = (field) => () => {
+        const { order } = this.state;
+
+        this.setState({
+            orderBy: field,
+            order: order === 'asc' ? 'desc' : 'asc',
+        });
+    };
+
+    handleSelect = (event) => {
+        console.log(event);
+    }
+
     render() {
-        const { open } = this.state;
-        const { match: { url }, classes} = this.props;
+        const { open, order, orderBy } = this.state;
+        const { classes } = this.props;
         return (
             <>
                 <div className={classes.root}>
@@ -64,24 +79,25 @@ class TraineeList extends React.Component {
                                 {
                                     field: 'name',
                                     label: 'Name',
-                                    align: 'center',
                                 },
                                 {
                                     field: 'email',
                                     label: 'Email Address',
+                                    format: value => value && value.toUpperCase(),
+                                },
+                                {
+                                    field: 'createdAt',
+                                    label: 'Date',
+                                    align: 'right',
+                                    format: this.getDateForm,
                                 },
                             ]
                         }
+                        orderBy={orderBy}
+                        order={order}
+                        onSort={this.handleSort}
+                        onSelect={this.handleSelect}
                     />
-                    <ul>
-                        {trainees.map(({ name, id }) => (
-                            <li key={id}>
-                                <Link to={`${url}/${id}`}>
-                                    {name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             </>
         );
