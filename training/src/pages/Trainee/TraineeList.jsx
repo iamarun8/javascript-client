@@ -45,7 +45,6 @@ class TraineeList extends React.Component {
     }
 
     handleSort = (field) => () => {
-        console.log('---field is---', field);
         const { order } = this.state;
         this.setState({
             orderBy: field,
@@ -54,7 +53,7 @@ class TraineeList extends React.Component {
     };
 
     handleSelect = (data) => {
-        console.log('<== Select data is ==>',data);
+        console.log(data);
     }
 
     render() {

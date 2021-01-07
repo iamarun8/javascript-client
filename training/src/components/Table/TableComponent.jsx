@@ -57,7 +57,6 @@ function TableComponent(props) {
                             onMouseEnter={onSelect(element)}
                         >
                             {column.map(({ field, align, format }, index) => (
-                                console.log('----data inside----',field,":",element[field]),
                                 <TableCell key={`tableCell1_${index}`} align={align}>
                                     {format !== undefined ? format(element[field]) : element[field]}
                                 </TableCell>
