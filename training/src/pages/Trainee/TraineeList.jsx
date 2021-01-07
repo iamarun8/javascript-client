@@ -89,7 +89,7 @@ class TraineeList extends React.Component {
                                     field: 'createdAt',
                                     label: 'Date',
                                     align: 'right',
-                                    format: this.getDateForm,
+                                    format: this.getDateFormatted,
                                 },
                             ]
                         }
