@@ -45,16 +45,16 @@ class TraineeList extends React.Component {
     }
 
     handleSort = (field) => () => {
+        console.log('---field is---', field);
         const { order } = this.state;
-
         this.setState({
             orderBy: field,
             order: order === 'asc' ? 'desc' : 'asc',
         });
     };
 
-    handleSelect = (event) => {
-        console.log(event);
+    handleSelect = (data) => {
+        console.log('<== Select data is ==>',data);
     }
 
     render() {
