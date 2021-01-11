@@ -56,7 +56,6 @@ class TraineeList extends React.Component {
 
     handleSort = (field) => () => {
         const { order } = this.state;
-
         this.setState({
             orderBy: field,
             order: order === 'asc' ? 'desc' : 'asc',
@@ -158,7 +157,7 @@ class TraineeList extends React.Component {
                                     field: 'createdAt',
                                     label: 'Date',
                                     align: 'right',
-                                    format: this.getDateForm,
+                                    format: this.getDateFormatted,
                                 },
                             ]
                         }
