@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, TableCell, TableContainer, TableHead, TableRow, Paper, withStyles, TableBody, TableSortLabel } from '@material-ui/core';
+import {
+    Table, TableCell, TableContainer, TableHead, TableRow, withStyles, TableBody,
+    TableSortLabel, TablePagination, IconButton,
+} from '@material-ui/core';
 
 const useStyles = (theme) => ({
     table: {
@@ -22,49 +25,55 @@ const useStyles = (theme) => ({
 });
 
 function TableComponent(props) {
-    const { classes, data, column, orderBy, order, onSort, onSelect } = props;
-
+    const {classes, data, column, order, orderBy, onSort, onSelect, count, page, actions,rowsPerPage, onChangePage} = props;
     return (
-        <TableContainer component={Paper}>
+        <TableContainer>
             <Table className={classes.table}>
                 <TableHead>
-                    <TableRow>
-                        {
-                            column.map(({align, field, label}, index) => (
-                                <TableCell
-                                    key={`tableCell1_${index}`} 
-                                    className={classes.header}
-                                    align={align}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy === field}
-                                        direction={orderBy === field ? order : 'asc'}
-                                        onClick={onSort(field)}
-                                    >
-                                        {label}
-                                    </TableSortLabel>
-                                </TableCell>
-                            ))
-                        }
+                    <TableRow key={data.trainees.id}>
+                        {column.map((Data, index) => (
+                            <TableCell
+                                key={`tableRow1${index}`}
+                                className={classes.header}
+                                align={Data.align}
+                                sortDirection={orderBy === Data.label ? order : false}
+                            >
+                                <TableSortLabel
+                                    key={`tableRow2${index}`}
+                                    active={orderBy === Data.label}
+                                    direction={orderBy === Data.label ? order : 'asc'}
+                                    onClick={onSort(Data.label)}
+                                >{Data.label}
+                                </TableSortLabel>
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {data.trainees.map((element) => (
-                        console.log('>>ELEMENT<<',element),
                         <TableRow
                             key={element.id}
                             className={classes.root}
                             onMouseEnter={onSelect(element)}
                         >
                             {column.map(({ field, align, format }, index) => (
-                                <TableCell key={`tableCell1_${index}`} align={align}>
-                                    {format !== undefined ? format(element[field]) : element[field]}
-                                </TableCell>
+                                <TableCell key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
+                            ))}
+                            {actions.map(({ icon, handler }, index) => (
+                                <IconButton key={`tableRow4_${index}`} onClick={handler(element)} className={classes.action}>{icon}</IconButton>
                             ))}
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
+            <TablePagination
+                component="div"
+                rowsPerPageOptions={[0]}
+                count={count}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={onChangePage}
+            />
         </TableContainer>
     );
 }
@@ -74,11 +83,16 @@ TableComponent.propTypes = {
     order: PropTypes.string,
     orderBy: PropTypes.string,
     onSort: PropTypes.func,
+    actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    count: PropTypes.number.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+    onSelect: PropTypes.func.isRequired,
 };
 TableComponent.defaultProps = {
     order: 'asc',
     orderBy: '',
     onSort: () => { },
 };
-
 export default withStyles(useStyles)(TableComponent);

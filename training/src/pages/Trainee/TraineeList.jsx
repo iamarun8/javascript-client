@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { AddDialog } from './components/AddDialog';
+import { EditDialog } from './components/EditDialog';
+import { DeleteDialog } from './components/DeleteDialog'
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import trainees from './data/trainee';
 import { TableComponent } from '../../components/Table';
 
@@ -23,6 +27,12 @@ class TraineeList extends React.Component {
             selected: '',
             order: 'asc',
             orderBy: '',
+            EditOpen: false,
+            RemoveOpen: false,
+            editData: {},
+            deleteData: {},
+            page: 0,
+            rowsPerPage: 10,
         };
     }
 
@@ -53,11 +63,60 @@ class TraineeList extends React.Component {
     };
 
     handleSelect = (data) => {
-        console.log(data);
+        // console.log(data);
+
     }
 
+    handleChangePage = (event, newPage) => {
+        this.setState({
+            page: newPage,
+        });
+    };
+
+    handleRemoveDialogOpen = (element) => () => {
+        this.setState({
+            RemoveOpen: true,
+            deleteData: element,
+        });
+    };
+
+    handleRemoveClose = () => {
+        this.setState({
+            RemoveOpen: false,
+        });
+    };
+
+    handleRemove = () => {
+        const { deleteData } = this.state;
+        this.setState({
+            RemoveOpen: false,
+        });
+        console.log('Deleted Item ', deleteData);
+    };
+
+    handleEditDialogOpen = (element) => () => {
+        this.setState({
+            EditOpen: true,
+            editData: element,
+        });
+    };
+
+    handleEditClose = () => {
+        this.setState({
+            EditOpen: false,
+        });
+    };
+
+    handleEdit = (name, email) => {
+        this.setState({
+            EditOpen: false,
+        });
+        console.log('Edited Item ', { name, email });
+    };
+
+
     render() {
-        const { open, order, orderBy } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData } = this.state;
         const { classes } = this.props;
         return (
             <>
@@ -68,8 +127,18 @@ class TraineeList extends React.Component {
                         </Button>
                     </div>
                     <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
-                    &nbsp;
-                    &nbsp;
+                    <EditDialog
+                        Editopen={EditOpen}
+                        handleEditClose={this.handleEditClose}
+                        handleEdit={this.handleEdit}
+                        data={editData}
+                    />
+                    <DeleteDialog
+                        openRemove={RemoveOpen}
+                        onClose={this.handleRemoveClose}
+                        remove={this.handleRemove}
+                        data={deleteData}
+                    />
                     <TableComponent
                         id="id"
                         data={trainees}
@@ -92,10 +161,24 @@ class TraineeList extends React.Component {
                                 },
                             ]
                         }
+                        actions={[
+                            {
+                                icon: <EditIcon />,
+                                handler: this.handleEditDialogOpen,
+                            },
+                            {
+                                icon: <DeleteIcon />,
+                                handler: this.handleRemoveDialogOpen,
+                            }
+                        ]}
                         orderBy={orderBy}
                         order={order}
                         onSort={this.handleSort}
                         onSelect={this.handleSelect}
+                        count={100}
+                        page={page}
+                        onChangePage={this.handleChangePage}
+                        rowsPerPage={rowsPerPage}
                     />
                 </div>
             </>
