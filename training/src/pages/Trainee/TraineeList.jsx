@@ -64,18 +64,17 @@ class TraineeList extends React.Component {
     };
 
     handleSelect = (data) => {
-        console.log();
+        // console.log(data);
+
     }
 
     handleChangePage = (event, newPage) => {
-        console.log('inside handleChangePage');
         this.setState({
             page: newPage,
         });
     };
 
     handleRemoveDialogOpen = (element) => () => {
-        console.log('inside handleRemoveDialogOpen');
         this.setState({
             RemoveOpen: true,
             deleteData: element,
@@ -83,14 +82,12 @@ class TraineeList extends React.Component {
     };
 
     handleRemoveClose = () => {
-        console.log('inside handleRemoveClose');
         this.setState({
             RemoveOpen: false,
         });
     };
 
     handleRemove = () => {
-        console.log('inside handleRemove');
         const { deleteData } = this.state;
         this.setState({
             RemoveOpen: false,
@@ -99,7 +96,6 @@ class TraineeList extends React.Component {
     };
 
     handleEditDialogOpen = (element) => () => {
-        console.log('inside handleEditDialogOpen');
         this.setState({
             EditOpen: true,
             editData: element,
@@ -107,14 +103,12 @@ class TraineeList extends React.Component {
     };
 
     handleEditClose = () => {
-        console.log('inside handleEditClose');
         this.setState({
             EditOpen: false,
         });
     };
 
     handleEdit = (name, email) => {
-        console.log('inside handleEdit');
         this.setState({
             EditOpen: false,
         });
