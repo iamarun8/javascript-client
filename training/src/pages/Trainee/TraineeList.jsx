@@ -67,7 +67,7 @@ class TraineeList extends React.Component {
         console.log();
     }
 
-    handleChangePage = (newPage) => {
+    handleChangePage = (event, newPage) => {
         console.log('inside handleChangePage');
         this.setState({
             page: newPage,
@@ -134,15 +134,12 @@ class TraineeList extends React.Component {
                         </Button>
                     </div>
                     <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
-                    &nbsp;
-                    &nbsp;
                     <EditDialog
                         Editopen={EditOpen}
                         handleEditClose={this.handleEditClose}
                         handleEdit={this.handleEdit}
                         data={editData}
                     />
-                    <br />
                     <DeleteDialog
                         openRemove={RemoveOpen}
                         onClose={this.handleRemoveClose}

@@ -99,7 +99,7 @@ class InputDemo extends React.Component {
                     <p><b>Name:</b></p>
                     <TextField
                         error={this.getError('name')}
-                        onChange={this.handleNameChange}
+                        onChange={(event)=>this.handleNameChange}
                         onBlur={() => this.isTouched('name')}
                     />
                     <p><b>Select the game you play?</b></p>
