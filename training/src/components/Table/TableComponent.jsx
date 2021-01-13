@@ -66,14 +66,17 @@ function TableComponent(props) {
                     ))}
                 </TableBody>
             </Table>
-            <TablePagination
-                component="div"
-                rowsPerPageOptions={[0]}
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={onChangePage}
-            />
+            {
+                (count === 0) ? '' : <TablePagination
+                    component="div"
+                    rowsPerPageOptions={[0]}
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={onChangePage}
+                />
+            }
+            
         </TableContainer>
     );
 }

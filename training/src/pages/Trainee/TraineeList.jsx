@@ -9,6 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import trainees from './data/trainee';
 import { TableComponent } from '../../components/Table';
+import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 
 const useStyles = (theme) => ({
     root: {
@@ -134,9 +135,9 @@ class TraineeList extends React.Component {
                         data={editData}
                     />
                     <DeleteDialog
-                        openRemove={RemoveOpen}
+                        open={RemoveOpen}
                         onClose={this.handleRemoveClose}
-                        remove={this.handleRemove}
+                        onSubmit={this.handleRemove}
                         data={deleteData}
                     />
                     <TableComponent
@@ -157,7 +158,7 @@ class TraineeList extends React.Component {
                                     field: 'createdAt',
                                     label: 'Date',
                                     align: 'right',
-                                    format: this.getDateFormatted,
+                                    format: getDateFormatted,
                                 },
                             ]
                         }
