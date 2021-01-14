@@ -11,7 +11,6 @@ class SnackBarProvider extends React.Component {
         this.state = {
             message: '',
             status: '',
-            open: false,
         };
     }
 
@@ -54,7 +53,7 @@ const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 const CustomizedSnackbars = () => {
     const value = React.useContext(MyContext);
     const { closeSnackBar, state } = value;
-    const { open, message, status } = state;
+    const { open, message, status, vertical, horizontal } = state;
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -63,7 +62,7 @@ const CustomizedSnackbars = () => {
     };
     return (
         <div>
-            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right' }} >
                 {status === 'success' ? ( <Alert onClose={handleClose} severity="success">{message}</Alert> ) : (<Alert onClose={handleClose} severity="error">{message}</Alert> ) }
             </Snackbar>
         </div>
