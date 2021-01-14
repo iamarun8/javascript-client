@@ -54,7 +54,6 @@ function TableComponent(props) {
                         <TableRow
                             key={element.id}
                             className={classes.root}
-                            // onMouseEnter={onSelect(element.name)}
                         >
                             {column.map(({ field, align, format }, index) => (
                                 <TableCell onClick={() => onSelect(element)} key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
