@@ -1,47 +1,87 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button} from '@material-ui/core';
+import * as moment from 'moment';
+import { MyContext } from '../../../../contexts/index';
 
-const useStyles = () => ({
-    button_color: {
-        backgroundColor: 'blue',
-        color: 'white',
-    },
-});
+class DeleteDialog extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
 
-function DeleteDialog(props) {
-    const {openRemove, onClose, remove, classes} = props;
-    return (
-        <div width="50%">
+    handleChange = (prop) => (event) => {
+        this.setState({ [prop]: event.target.value }, () => console.log(this.state));
+    };
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
+    handleSnackBarMessage = (data, openSnackBar) => {
+        const date = '2019-02-12T18:15:11.778Z';
+        const isAfter = (moment(data.createdAt).isAfter(date));
+        console.log(isAfter, data.createdAt);
+        if (isAfter) {
+            this.setState({
+                message: 'Deleted Trainee Successfully ',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'success');
+            });
+        } else {
+            this.setState({
+                message: 'Error While Deleting Trainee',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'error');
+            });
+        }
+    }
+
+    render() {
+        const { open, onClose, onSubmit, data } = this.props;
+        return (
             <Dialog
-                open={openRemove}
-                variant="outlined"
-                color="primary"
+                open={open}
+                onClose={() => this.handleClose()}
                 fullWidth
             >
                 <DialogTitle id="form-dialog-title">Remove Trainee</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Do you really want to remove Trainee ?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={remove} color="primary" variant="contained" className={classes.button_color}>
-                        Delete
-                    </Button>
-                </DialogActions>
+                <DialogContentText style={{ marginLeft: 25 }}>
+                    Do you really want to remove the trainee?
+                    <DialogActions>
+                        <Button onClick={onClose} color="primary">Cancel</Button>
+                        <MyContext.Consumer>
+                            {({ openSnackBar }) => (
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={() => {
+                                        onSubmit({ data });
+                                        this.handleSnackBarMessage(data, openSnackBar);
+                                    }}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </MyContext.Consumer>
+                    </DialogActions>
+                </DialogContentText>
             </Dialog>
-        </div>
-    );
+        );
+    }
 }
+
 DeleteDialog.propTypes = {
-    openRemove: PropTypes.bool.isRequired,
+    open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    data: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-export default withStyles(useStyles)(DeleteDialog);
+export default DeleteDialog;

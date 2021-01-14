@@ -1,11 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect,} from 'react-router-dom';
+import { SnackBarProvider } from './contexts';
 import {Login, InputDemo, ChildrenDemo, Trainee, TextFieldDemo,NoMatch,} from './pages';
 import { AuthRoute, PrivateRoute } from './routes/index';
+// import { SnackBarProvider } from './contexts/SnackBarProvider';
 
 class App extends React.Component {
   render() {
     return (
+      <div>
+      <SnackBarProvider>
       <Router>
         <Switch>
           <Route path="/" exact>
@@ -20,6 +24,8 @@ class App extends React.Component {
 
         </Switch>
       </Router>
+      </SnackBarProvider>
+      </div>
     );
   }
 }

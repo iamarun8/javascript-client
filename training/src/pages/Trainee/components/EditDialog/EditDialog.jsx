@@ -6,6 +6,7 @@ import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, Dia
 import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
+import { MyContext } from '../../../../contexts';
 
 const useStyles = () => ({
     button_color: {
@@ -31,6 +32,11 @@ class EditDialog extends React.Component {
             error: {
                 name: '',
                 email: '',
+            },
+            hasErrors: false,
+            touched: {
+                name: false,
+                email: false,
             },
         };
     }
@@ -84,7 +90,7 @@ class EditDialog extends React.Component {
     };
 
     render() {
-        const {Editopen, handleEditClose, handleEdit, data, classes} = this.props;
+        const { Editopen, handleEditClose, handleEdit, data, classes } = this.props;
         const { name, email, error } = this.state;
         return (
             <div>
@@ -146,15 +152,23 @@ class EditDialog extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleEditClose} color="primary">Cancel</Button>
-                        <Button
-                            onClick={() => handleEdit(name, email)}
-                            className={(name === data.name && email === data.email) || this.hasErrors() ? classes.button_error : classes.button_color}
-                            color="primary"
-                            variant="contained"
-                            disabled={!!((name === data.name && email === data.email) || this.hasErrors())}
-                        >
-                        Submit
-                        </Button>
+                        <MyContext.Consumer>
+                            {({ openSnackBar }) => (
+                                <Button
+                                    onClick={() => {
+                                        handleEdit(name, email);
+                                        openSnackBar('Trainee updated successfully !', 'success');
+                                    }}
+                                    className={(name === data.name && email === data.email) || this.hasErrors() ? classes.button_error : classes.button_color}
+                                    color="primary"
+                                    variant="contained"
+                                    disabled={!!((name === data.name && email === data.email) || this.hasErrors())}
+                                >
+                                    Submit
+                                </Button>
+
+                            )}
+                        </MyContext.Consumer>
                     </DialogActions>
                 </Dialog>
             </div>
