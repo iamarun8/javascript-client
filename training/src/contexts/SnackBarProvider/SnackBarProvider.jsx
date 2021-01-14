@@ -49,15 +49,12 @@ class SnackBarProvider extends React.Component {
         );
     }
 }
-// eslint-disable-next-line react/jsx-props-no-spreading
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const CustomizedSnackbars = () => {
     const value = React.useContext(MyContext);
     const { closeSnackBar, state } = value;
-    const {
-        open, message, status,
-    } = state;
+    const { open, message, status } = state;
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -67,12 +64,7 @@ const CustomizedSnackbars = () => {
     return (
         <div>
             <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-                {status === 'success' ? (
-                    <Alert onClose={handleClose} severity="success">
-                        {message}
-                    </Alert>
-                )
-                    : <Alert onClose={handleClose} severity="error">{message}</Alert>}
+                {status === 'success' ? ( <Alert onClose={handleClose} severity="success">{message}</Alert> ) : (<Alert onClose={handleClose} severity="error">{message}</Alert> ) }
             </Snackbar>
         </div>
     );

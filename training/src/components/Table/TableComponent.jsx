@@ -54,10 +54,10 @@ function TableComponent(props) {
                         <TableRow
                             key={element.id}
                             className={classes.root}
-                            onMouseEnter={onSelect(element)}
+                            // onMouseEnter={onSelect(element.name)}
                         >
                             {column.map(({ field, align, format }, index) => (
-                                <TableCell key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
+                                <TableCell onClick={() => onSelect(element)} key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
                             ))}
                             {actions.map(({ icon, handler }, index) => (
                                 <IconButton key={`tableRow4_${index}`} onClick={handler(element)} className={classes.action}>{icon}</IconButton>

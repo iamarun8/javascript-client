@@ -45,24 +45,18 @@ class DeleteDialog extends Component {
     }
 
     render() {
-        const {
-            open, onClose, onSubmit, data,
-        } = this.props;
-
+        const { open, onClose, onSubmit, data } = this.props;
         return (
             <Dialog
                 open={open}
                 onClose={() => this.handleClose()}
                 fullWidth
-                maxWidth="md"
             >
                 <DialogTitle id="form-dialog-title">Remove Trainee</DialogTitle>
                 <DialogContentText style={{ marginLeft: 25 }}>
                     Do you really want to remove the trainee?
-        <DialogActions>
-                        <Button onClick={onClose} color="primary">
-                            Cancel
-          </Button>
+                    <DialogActions>
+                        <Button onClick={onClose} color="primary">Cancel</Button>
                         <MyContext.Consumer>
                             {({ openSnackBar }) => (
                                 <Button
