@@ -53,7 +53,7 @@ const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 const CustomizedSnackbars = () => {
     const value = React.useContext(MyContext);
     const { closeSnackBar, state } = value;
-    const { open, message, status, vertical, horizontal } = state;
+    const { open, message, status } = state;
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;

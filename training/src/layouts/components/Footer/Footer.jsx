@@ -13,7 +13,7 @@ export default function Footer() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            &#169;Successive Technologies
+           Successive Technologies
         </div>
     );
 }
