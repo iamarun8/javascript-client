@@ -1,18 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Button, InputAdornment, CardContent, Typography, Card, Avatar, CssBaseline, withStyles, } from '@material-ui/core';
+import {
+    TextField, Button, InputAdornment,
+    CardContent, Typography, Card, Avatar, CssBaseline, withStyles,
+    CircularProgress,
+} from '@material-ui/core';
 import { Email, VisibilityOff, LockOutlined } from '@material-ui/icons';
 import * as yup from 'yup';
+import localStorage from 'local-storage';
+import { Redirect } from 'react-router-dom';
+import callApi from '../../lib/utils/api';
+import { MyContext } from '../../contexts';
 
 const LoginStyle = (theme) => ({
     main: {
         width: 350,
         marginTop: theme.spacing(10),
         marginLeft: theme.spacing(62),
+        [theme.breakpoints.up(400 + theme.spacing(3) * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
     },
     icon: {
         background: 'red',
-        marginLeft: theme.spacing(19),
+        marginLeft: theme.spacing(22),
         marginTop: theme.spacing(2),
     },
 });
@@ -31,6 +44,9 @@ class Login extends React.Component {
         this.state = {
             email: '',
             password: '',
+            loading: false,
+            redirect: false,
+            hasError: true,
             touched: {
                 Email: false,
                 Password: false,
@@ -74,8 +90,49 @@ class Login extends React.Component {
         });
     }
 
+    handleRedirect = () => {
+        const { redirect } = this.state;
+        if (redirect) {
+            return <Redirect to="/trainee" />;
+        }
+    }
+
+    onClickHandler = async (data, openSnackBar) => {
+        console.log('Data is :', data);
+        this.setState({
+            loading: true,
+            hasError: true,
+        });
+        const res = await callApi(data, 'post', '/login');
+        console.log('ResponseErr', res);
+        this.setState({ loading: false });
+        const response = localStorage.get('token');
+        console.log('respone', response);
+        if (response && response.code === 200) {
+            this.setState({
+                redirect: true,
+                hasError: false,
+                message: 'Successfully Login!',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'success');
+            });
+        } else {
+            this.setState({
+                message: 'Login Failed, Record Not Found',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'error');
+            });
+        }
+    }
+
     render() {
         const { classes } = this.props;
+        const {
+            email, password, loading,
+        } = this.state;
+        this.hasErrors();
         return (
             <>
                 <div className={classes.main}>
@@ -131,7 +188,26 @@ class Login extends React.Component {
                                 </div>
                                 &nbsp;&nbsp;
                                 <div>
-                                    <Button variant="contained" color="primary" disabled={this.hasErrors()} fullWidth>SIGN IN</Button>
+                                    <MyContext.Consumer>
+                                        {({ openSnackBar }) => (
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.submit}
+                                                disabled={this.hasErrors() || loading}
+                                                onClick={() => {
+                                                    this.onClickHandler({ email, password }, openSnackBar);
+                                                }}
+                                            >
+                                                {loading && (
+                                                    <CircularProgress />
+                                                )}
+                                                {!loading && <span>Sign in</span>}
+                                                {this.handleRedirect()}
+                                            </Button>
+                                        )}
+                                    </MyContext.Consumer>
                                 </div>
                             </form>
                         </CardContent>
@@ -141,9 +217,7 @@ class Login extends React.Component {
         );
     }
 }
-
 Login.propTypes = {
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-
 export default withStyles(LoginStyle)(Login);

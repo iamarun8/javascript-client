@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Navbar } from '../components';
+import { Footer } from '../components';
 
 const AuthLayout = ({ children, ...rest }) => (
     <div>
-        <Navbar />
-        <br />
         <div>{children}</div>
+        <Footer />
     </div>
 );
 

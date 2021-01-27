@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Footer } from '../components/index';
+import { Navbar } from '../components/index';
 
 const PrivateLayout = ({ children, ...rest }) => (
     <div>
+        <Navbar />
         <div className="main">{children}</div>
-  &nbsp;
-        <Footer />
     </div>
 );
 
