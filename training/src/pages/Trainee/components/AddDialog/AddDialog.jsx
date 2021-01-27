@@ -172,15 +172,10 @@ class AddDialog extends React.Component {
               </div>
             </div>
         &nbsp;
-            {/* <div align="right">
-              <Button onClick={this.handleCancel} color="primary">CANCEL</Button>
-              <Button variant="contained" color="primary" disabled={this.hasErrors()} onClick={() => onSubmit({ name, email, password })}>SUBMIT</Button>
-            </div> */}
           </DialogContent>
           <DialogActions>
             <div align='right'>
               <Button onClick={onClose} color="primary">CANCEL</Button>
-              {/* <Button variant="contained" color="primary" disabled={this.hasErrors()} onClick={() => onSubmit()({ name, email, password })}>SUBMIT</Button> */}
               <MyContext.Consumer>
                 {({ openSnackBar }) => (
                   <Button

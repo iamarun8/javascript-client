@@ -195,7 +195,7 @@ class Login extends React.Component {
                                                 variant="contained"
                                                 color="primary"
                                                 className={classes.submit}
-                                                disabled={this.hasErrors()}
+                                                disabled={this.hasErrors() || loading}
                                                 onClick={() => {
                                                     this.onClickHandler({ email, password }, openSnackBar);
                                                 }}
@@ -203,7 +203,6 @@ class Login extends React.Component {
                                                 {loading && (
                                                     <CircularProgress />
                                                 )}
-                                                {loading && <span>Signing in</span>}
                                                 {!loading && <span>Sign in</span>}
                                                 {this.handleRedirect()}
                                             </Button>
