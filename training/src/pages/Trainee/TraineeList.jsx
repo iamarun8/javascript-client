@@ -10,6 +10,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import trainees from './data/trainee';
 import { TableComponent } from '../../components/Table';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
+import callApi from '../../lib/utils/api';
+import {IsLoadingHOC} from '../../components/HOC/index';
 
 const useStyles = (theme) => ({
     root: {
@@ -34,6 +36,11 @@ class TraineeList extends React.Component {
             deleteData: {},
             page: 0,
             rowsPerPage: 10,
+            count: 0,
+            limit: 20,
+            skip: 0,
+            dataObj: [[]],
+            loading: false,
         };
     }
 
@@ -68,6 +75,7 @@ class TraineeList extends React.Component {
     };
 
     handleChangePage = (event, newPage) => {
+        this.componentDidMount(newPage);
         this.setState({
             page: newPage,
         });
@@ -114,9 +122,38 @@ class TraineeList extends React.Component {
         console.log('Edited Item ', { name, email });
     };
 
+    handleChangesRowsPerPage = (event) => {
+        this.setState({
+            rowsPerPage: event.target.value,
+            page: 0,
+        });
+    };
+
+    componentDidMount = () => {
+        const { limit, skip, dataObj } = this.state;
+        this.setState({ loading: true });
+        callApi({}, 'get', `trainee?skip=${skip}&limit=${limit}`).then((response) => {
+            console.log('List Response', response);
+            if (response === undefined) {
+                console.log('errtyyuyuii----');
+                this.setState({
+                    loading: false,
+                    message: 'An error occured while displaying Trainee',
+                });
+            } else {
+                const records = response.data;
+                this.setState({ dataObj: records, loading: false, Count: 100 });
+                console.log('dddddderrtyyuyuii----',records);
+                return records
+            }
+            console.log('--> dataObj Response : ', response);
+        });
+    }
+
 
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
+        console.log('dtOBJ', dataObj);
         const { classes } = this.props;
         return (
             <>
@@ -141,8 +178,9 @@ class TraineeList extends React.Component {
                     />
                     <TableComponent
                         id="id"
-                        data={trainees}
-                        column={
+                        loading={loading}
+                        data={dataObj || [[]] }
+                        columns={
                             [
                                 {
                                     field: 'name',
@@ -175,10 +213,11 @@ class TraineeList extends React.Component {
                         order={order}
                         onSort={this.handleSort}
                         onSelect={this.handleSelect}
-                        count={100}
+                        count={count}
                         page={page}
                         onChangePage={this.handleChangePage}
                         rowsPerPage={rowsPerPage}
+                        onChangeRowsPerPage={this.handleChangesRowsPerPage}
                     />
                 </div>
             </>
@@ -189,4 +228,4 @@ TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-export default withStyles(useStyles)(TraineeList);
+export default withStyles(useStyles)(IsLoadingHOC(TraineeList));

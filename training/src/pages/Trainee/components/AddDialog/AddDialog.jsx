@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, InputAdornment, DialogActions } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, InputAdornment, DialogActions, CircularProgress } from '@material-ui/core';
 import { Email, VisibilityOff, Person } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
+import localStorage from 'local-storage';
 import { MyContext } from '../../../../contexts'
+import callApi from '../../../../lib/utils/api';
 
 const schema = yup.object().shape({
   name: yup.string().trim().required('Name is a required field').min(3),
@@ -56,6 +58,7 @@ class AddDialog extends React.Component {
       Email: '',
       Password: '',
       ConfirmPassword: '',
+      loading: false,
       touched: {
         name: false,
         email: false,
@@ -114,11 +117,40 @@ class AddDialog extends React.Component {
     return '';
   }
 
+  onClickHandler = async (data, openSnackBar) => {
+      this.setState({
+        loading: true,
+        hasError: true,
+      });
+      await callApi(data, 'post', 'trainee');
+      this.setState({ loading: false });
+      const Token = localStorage.get('token');
+      console.log('-->AddDialog Token',Token);
+      if (Token !== 'undefined') {
+        this.setState({
+          hasError: false,
+          message: 'This is a successfully added trainee message',
+        }, () => {
+          const { message } = this.state;
+          openSnackBar(message, 'success');
+        });
+      } else {
+        this.setState({
+          hasError: false,
+          message: 'error in submitting',
+        }, () => {
+          const { message } = this.state;
+          openSnackBar(message, 'error');
+        });
+      }
+    }
+
+
   render() {
     const {
-      open, onClose, onSubmit, classes,
+      open, onClose, classes,
     } = this.props;
-    const { name, email, password, confirmPassword } = this.state;
+    const { Name, Email, Password, ConfirmPassword, loading } = this.state;
     const ans = [];
     config.forEach((value) => {
       ans.push(
@@ -182,14 +214,16 @@ class AddDialog extends React.Component {
                     color="primary"
                     variant="contained"
                     onClick={() => {
-                      onSubmit({
-                        name, email, password, confirmPassword
-                      });
-                      openSnackBar('Trainee added successfully! ', 'success');
+                      this.onClickHandler({
+                        Name, Email, Password, ConfirmPassword
+                      }, openSnackBar);
                     }}
-                    disabled={this.hasErrors()}
+                    disabled={this.hasErrors() || loading}
                   >
-                    Submit
+                    {loading && (
+                      <CircularProgress size={15} />
+                    )}
+                    {!loading && <span>Submit</span>}
                   </Button>
                 )}
               </MyContext.Consumer>

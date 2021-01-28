@@ -5,7 +5,7 @@ import {
     CardContent, Typography, Card, Avatar, CssBaseline, withStyles,
     CircularProgress,
 } from '@material-ui/core';
-import { Email, VisibilityOff, LockOutlined } from '@material-ui/icons';
+import { Email, VisibilityOff, LockOutlined, TrainRounded } from '@material-ui/icons';
 import * as yup from 'yup';
 import localStorage from 'local-storage';
 import { Redirect } from 'react-router-dom';
@@ -103,12 +103,15 @@ class Login extends React.Component {
             loading: true,
             hasError: true,
         });
-        const res = await callApi(data, 'post', '/login');
-        console.log('ResponseErr', res);
+        const response = await callApi(data, 'post', 'user/login', true);
+        console.log('ResponseToken', response, '^^^^^^', response);
+        localStorage.set('token', response.data);
         this.setState({ loading: false });
-        const response = localStorage.get('token');
-        console.log('respone', response);
-        if (response && response.code === 200) {
+        // const response = localStorage.get('token');
+        // console.log('respone', response);
+        const Token = localStorage.get('token');
+        console.log('---token in login--',);
+        if (Token !== 'undefined') {
             this.setState({
                 redirect: true,
                 hasError: false,
