@@ -58,7 +58,7 @@ class TraineeList extends React.Component {
         });
     };
 
-    handleSelect = ( data) => {
+    handleSelect = (data) => {
         console.log(data);
     };
 
@@ -69,7 +69,7 @@ class TraineeList extends React.Component {
         });
     };
 
-    handleRemoveDialogOpen = (element) => () => {
+    handleRemoveDialogOpen = (element) => {
         this.setState({
             RemoveOpen: true,
             deleteData: element,
@@ -90,7 +90,7 @@ class TraineeList extends React.Component {
         console.log('Deleted Item ', deleteData);
     };
 
-    handleEditDialogOpen = (element) => () => {
+    handleEditDialogOpen = (element)  => {
         this.setState({
             EditOpen: true,
             editData: element,
@@ -208,7 +208,5 @@ class TraineeList extends React.Component {
 TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
-    currentstate: PropTypes.func.isRequired,
-    setLoading: PropTypes.bool.isRequired
 };
 export default withStyles(useStyles)(withLoaderAndMessage(TraineeList));

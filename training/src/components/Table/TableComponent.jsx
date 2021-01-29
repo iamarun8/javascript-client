@@ -93,7 +93,6 @@ function TableComponent(props) {
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onChangePage={onChangePage}
-                            onChangeRowsPerPage={onChangeRowsPerPage}
                         />
                     )
                 }
@@ -116,7 +115,6 @@ TableComponent.propTypes = {
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
     onChangePage: PropTypes.func.isRequired,
-    onChangeRowsPerPage: PropTypes.func.isRequired,
 };
 TableComponent.defaultProps = {
     order: 'asc',
