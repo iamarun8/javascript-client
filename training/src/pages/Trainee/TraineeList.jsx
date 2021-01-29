@@ -7,9 +7,10 @@ import { EditDialog } from './components/EditDialog';
 import { DeleteDialog } from './components/DeleteDialog'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import trainees from './data/trainee';
 import { TableComponent } from '../../components/Table';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
+import callApi from '../../lib/utils/api';
+import { withLoaderAndMessage } from '../../components/HOC/index';
 
 const useStyles = (theme) => ({
     root: {
@@ -34,6 +35,10 @@ class TraineeList extends React.Component {
             deleteData: {},
             page: 0,
             rowsPerPage: 10,
+            count: 0,
+            limit: 20,
+            skip: 0,
+            dataObj: [[]],
         };
     }
 
@@ -42,18 +47,8 @@ class TraineeList extends React.Component {
     };
 
     handleClose = () => {
-        const { open } = this.state;
         this.setState({ open: false });
-        return open;
     };
-
-    handleSubmit = (data) => {
-        this.setState({
-            open: false,
-        }, () => {
-            console.log(data);
-        });
-    }
 
     handleSort = (field) => () => {
         const { order } = this.state;
@@ -63,17 +58,18 @@ class TraineeList extends React.Component {
         });
     };
 
-    handleSelect = ( data) => {
+    handleSelect = (data) => {
         console.log(data);
     };
 
     handleChangePage = (event, newPage) => {
+        this.componentDidMount(newPage);
         this.setState({
             page: newPage,
         });
     };
 
-    handleRemoveDialogOpen = (element) => () => {
+    handleRemoveDialogOpen = (element) => {
         this.setState({
             RemoveOpen: true,
             deleteData: element,
@@ -94,7 +90,7 @@ class TraineeList extends React.Component {
         console.log('Deleted Item ', deleteData);
     };
 
-    handleEditDialogOpen = (element) => () => {
+    handleEditDialogOpen = (element) => {
         this.setState({
             EditOpen: true,
             editData: element,
@@ -114,73 +110,97 @@ class TraineeList extends React.Component {
         console.log('Edited Item ', { name, email });
     };
 
+    componentDidMount = () => {
+        const { limit, skip } = this.state;
+        const { setloader, setdataLength } = this.props;
+        callApi(`trainee?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
+            if (!response.data) {
+                this.setState({
+                    message: 'An error occured while displaying Trainee',
+                });
+                setloader(false);
+            } else {
+                this.setState({ dataObj: response.data, count: response.count  });
+                setloader(false);
+                setdataLength(response.count);
+                return response.data
+            }
+        });
+    }
+
 
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
         const { classes } = this.props;
+        const { loader, dataLength } = this.props;
         return (
             <>
-                <div className={classes.root}>
-                    <div className={classes.dialog}>
-                        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-                            ADD TRAINEELIST
+            {
+                (!loader) && (
+                        <div className={classes.root}>
+                            <div className={classes.dialog}>
+                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                                    ADD TRAINEELIST
                         </Button>
-                    </div>
-                    <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
-                    <EditDialog
-                        Editopen={EditOpen}
-                        handleEditClose={this.handleEditClose}
-                        handleEdit={this.handleEdit}
-                        data={editData}
-                    />
-                    <DeleteDialog
-                        open={RemoveOpen}
-                        onClose={this.handleRemoveClose}
-                        onSubmit={this.handleRemove}
-                        data={deleteData}
-                    />
-                    <TableComponent
-                        id="id"
-                        data={trainees}
-                        column={
-                            [
-                                {
-                                    field: 'name',
-                                    label: 'Name',
-                                },
-                                {
-                                    field: 'email',
-                                    label: 'Email Address',
-                                    format: value => value && value.toUpperCase(),
-                                },
-                                {
-                                    field: 'createdAt',
-                                    label: 'Date',
-                                    align: 'right',
-                                    format: getDateFormatted,
-                                },
-                            ]
-                        }
-                        actions={[
-                            {
-                                icon: <EditIcon />,
-                                handler: this.handleEditDialogOpen,
-                            },
-                            {
-                                icon: <DeleteIcon />,
-                                handler: this.handleRemoveDialogOpen,
-                            }
-                        ]}
-                        orderBy={orderBy}
-                        order={order}
-                        onSort={this.handleSort}
-                        onSelect={this.handleSelect}
-                        count={100}
-                        page={page}
-                        onChangePage={this.handleChangePage}
-                        rowsPerPage={rowsPerPage}
-                    />
-                </div>
+                            </div>
+                            <AddDialog open={open} onClose={this.handleClose} />
+                            <br />
+                            <EditDialog
+                                Editopen={EditOpen}
+                                handleEditClose={this.handleEditClose}
+                                handleEdit={this.handleEdit}
+                                data={editData}
+                            />
+                            <DeleteDialog
+                                open={RemoveOpen}
+                                onClose={this.handleRemoveClose}
+                                onSubmit={this.handleRemove}
+                                data={deleteData}
+                            />
+                            <TableComponent
+                                id="id"
+                                data={dataObj || [[]] }
+                                columns={
+                                    [
+                                        {
+                                            field: 'name',
+                                            label: 'Name',
+                                        },
+                                        {
+                                            field: 'email',
+                                            label: 'Email Address',
+                                            format: value => value && value.toUpperCase(),
+                                        },
+                                        {
+                                            field: 'createdAt',
+                                            label: 'Date',
+                                            align: 'right',
+                                            format: getDateFormatted,
+                                        },
+                                    ]
+                                }
+                                actions={[
+                                    {
+                                        icon: <EditIcon />,
+                                        handler: this.handleEditDialogOpen,
+                                    },
+                                    {
+                                        icon: <DeleteIcon />,
+                                        handler: this.handleRemoveDialogOpen,
+                                    }
+                                ]}
+                                orderBy={orderBy}
+                                order={order}
+                                onSort={this.handleSort}
+                                onSelect={this.handleSelect}
+                                count={dataLength}
+                                page={page}
+                                onChangePage={this.handleChangePage}
+                                rowsPerPage={rowsPerPage}
+                            />
+                        </div>
+                )
+            }
             </>
         );
     }
@@ -189,4 +209,4 @@ TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-export default withStyles(useStyles)(TraineeList);
+export default withStyles(useStyles)(withLoaderAndMessage(TraineeList));

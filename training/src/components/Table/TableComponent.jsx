@@ -1,37 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Table, TableCell, TableContainer, TableHead, TableRow, withStyles, TableBody,
-    TableSortLabel, TablePagination, IconButton,
+    Table, TableCell, TableContainer, TableHead, TableRow, Paper, withStyles, TableBody,
 } from '@material-ui/core';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Button from '@material-ui/core/Button';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = (theme) => ({
+    tableContainer: {
+        marginLeft: 20,
+        width: '97%',
+    },
     table: {
         minWidth: 650,
     },
-    header: {
+    tableHeader: {
         color: 'grey',
     },
-    root: {
+    tableRow: {
+        cursor: 'pointer',
         '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.palette.grey[100],
         },
         '&:hover': {
-            backgroundColor: 'rgb(200,200,200)',
-            cursor: 'pointer',
+            backgroundColor: theme.palette.grey[300],
         },
     },
-
 });
 
 function TableComponent(props) {
-    const {classes, data, column, order, orderBy, onSort, onSelect, count, page, actions,rowsPerPage, onChangePage} = props;
+    const {
+        id, columns, classes, order, orderBy, onSort, onSelect,
+        actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
+    } = props;
+
+    const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
     return (
-        <TableContainer>
+        <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table}>
                 <TableHead>
-                    <TableRow key={data.trainees.id}>
-                        {column.map((Data, index) => (
+                    <TableRow>
+                        {columns.map((Data, index) => (
                             <TableCell
                                 key={`tableRow1${index}`}
                                 className={classes.header}
@@ -50,51 +61,63 @@ function TableComponent(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.trainees.map((element) => (
-                        <TableRow
-                            key={element.id}
-                            className={classes.root}
-                        >
-                            {column.map(({ field, align, format }, index) => (
-                                <TableCell onClick={() => onSelect(element)} key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
-                            ))}
-                            {actions.map(({ icon, handler }, index) => (
-                                <IconButton key={`tableRow4_${index}`} onClick={handler(element)} className={classes.action}>{icon}</IconButton>
-                            ))}
+                    {paginationData.map((item, index) => (
+                        <TableRow className={classes.tableRow} key={item[id]}>
+                            {
+                                columns && columns.length && columns.map(({ align, field, format }) => (
+                                    <TableCell onClick={(event) => onSelect(event, item.name)} align={align} component="th" scope="row" order={order} ordery={orderBy}>
+                                        {format ? format(item[field]) : item[field]}
+                                    </TableCell>
+                                ))
+                            }
+                            <TableCell>
+                                {actions && actions.length && actions.map(({ icon, handler }) => (
+                                    <TableRow>
+                                        <TableRow>
+                                            <Button onClick={() => handler(item)}>
+                                                {icon}
+                                            </Button>
+                                        </TableRow>
+                                    </TableRow>
+                                ))}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
+                {
+                    (count === 0) ? '' : (
+                        <TablePagination
+                            rowsPerPageOptions={[10]}
+                            count={count}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={onChangePage}
+                        />
+                    )
+                }
             </Table>
-            {
-                (count === 0) ? '' : <TablePagination
-                    component="div"
-                    rowsPerPageOptions={[0]}
-                    count={count}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={onChangePage}
-                />
-            }
-            
         </TableContainer>
     );
 }
+
 TableComponent.propTypes = {
+    id: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(PropTypes.object),
+    columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    actions: PropTypes.arrayOf(PropTypes.object).isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
-    column: PropTypes.arrayOf(PropTypes.object).isRequired,
     order: PropTypes.string,
     orderBy: PropTypes.string,
-    onSort: PropTypes.func,
-    actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onSelect: PropTypes.func.isRequired,
+    onSort: PropTypes.func.isRequired,
     count: PropTypes.number.isRequired,
-    onChangePage: PropTypes.func.isRequired,
     page: PropTypes.number.isRequired,
     rowsPerPage: PropTypes.number.isRequired,
-    onSelect: PropTypes.func.isRequired,
+    onChangePage: PropTypes.func.isRequired,
 };
 TableComponent.defaultProps = {
     order: 'asc',
     orderBy: '',
-    onSort: () => { },
+    data:[]
 };
-export default withStyles(useStyles)(TableComponent);
+export default withStyles(useStyles)((TableComponent));

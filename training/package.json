@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "commitizen": "^4.2.2",
     "hooks": "^0.3.2",
+    "jsonwebtoken": "^8.5.1",
     "lint": "^0.7.0",
     "local-storage": "^2.0.0",
     "moment": "^2.29.1",

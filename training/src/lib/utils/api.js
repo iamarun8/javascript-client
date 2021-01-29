@@ -1,23 +1,18 @@
 import axios from 'axios';
 import localStorage from 'local-storage';
 
-const callApi = async (data, method, url) => {
-    console.log('---Api file---')
+const callApi = async (url, method, data) => {
     try {
-        const baseUrl = `http://localhost:9000/api/user${url}`;
-        console.log('base url', baseUrl);
-        const { email, password } = data;
+        const baseUrl = `http://localhost:9000/api/${url}`;
         const response = await axios({
             method,
             url: baseUrl,
-            data: {
-                email,
-                password,
-            },
+            data,
+            headers: {
+                Authorization: localStorage.get('token'),
+            }
         });
-        localStorage.set('token', response.data);
-        const token = localStorage.get('token');
-        console.log('Token:', token);
+        return response.data;
     } catch (error) {
         console.log('Inside catch', error);
         return { status: 'error', message: 'Login Incorrect' };

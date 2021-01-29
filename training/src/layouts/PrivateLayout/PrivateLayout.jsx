@@ -5,12 +5,12 @@ import { Navbar } from '../components/index';
 const PrivateLayout = ({ children, ...rest }) => (
     <div>
         <Navbar />
-        <div className="main">{children}</div>
+        <div>{children}</div>
     </div>
 );
 
 PrivateLayout.propTypes = {
-    children: PropTypes.objectOf(PropTypes.string).isRequired,
+    children: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default PrivateLayout;

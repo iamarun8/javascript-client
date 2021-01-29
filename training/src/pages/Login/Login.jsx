@@ -5,7 +5,7 @@ import {
     CardContent, Typography, Card, Avatar, CssBaseline, withStyles,
     CircularProgress,
 } from '@material-ui/core';
-import { Email, VisibilityOff, LockOutlined } from '@material-ui/icons';
+import { Email, VisibilityOff, LockOutlined, TrainRounded } from '@material-ui/icons';
 import * as yup from 'yup';
 import localStorage from 'local-storage';
 import { Redirect } from 'react-router-dom';
@@ -98,28 +98,28 @@ class Login extends React.Component {
     }
 
     onClickHandler = async (data, openSnackBar) => {
-        console.log('Data is :', data);
         this.setState({
             loading: true,
             hasError: true,
         });
-        const res = await callApi(data, 'post', '/login');
-        console.log('ResponseErr', res);
-        this.setState({ loading: false });
-        const response = localStorage.get('token');
-        console.log('respone', response);
-        if (response && response.code === 200) {
+        const response = await callApi('user/login','post', data);
+        if(response.data)
+        {
+            localStorage.set('token', response.data);
             this.setState({
                 redirect: true,
                 hasError: false,
                 message: 'Successfully Login!',
+                loading: false
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
             });
-        } else {
+        }
+         else {
             this.setState({
                 message: 'Login Failed, Record Not Found',
+                loading: false
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'error');
