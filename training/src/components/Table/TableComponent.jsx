@@ -141,7 +141,7 @@ function TableComponent(props) {
         id, columns, classes, order, orderBy, onSort, onSelect,
         actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = props;
-    console.log('--data--inside--TABLECOMPONENT--',data);
+    // console.log('--data--inside--TABLECOMPONENT--',data);
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>

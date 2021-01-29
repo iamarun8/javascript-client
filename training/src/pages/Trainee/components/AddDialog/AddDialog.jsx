@@ -119,15 +119,15 @@ class AddDialog extends React.Component {
 
   onClickHandler = async (data, openSnackBar) => {
     console.log('----data inside add dialog---',data);
+    const { onClose } = this.props
       this.setState({
         loading: true,
         hasError: true,
       });
-      await callApi(data, 'post', 'trainee', true);
+      const {name, email, password, confirmPassword} = data;
+      const response = await callApi('trainee', 'post', {name,email, password, confirmPassword, role: 'trainee'});
       this.setState({ loading: false });
-      const Token = localStorage.get('token');
-      console.log('-->AddDialog Token',Token);
-      if (Token !== 'undefined') {
+      if (!response.err) {
         this.setState({
           hasError: false,
           message: 'This is a successfully added trainee message',
@@ -144,6 +144,7 @@ class AddDialog extends React.Component {
           openSnackBar(message, 'error');
         });
       }
+      onClose();
     }
 
   formReset = () => {
@@ -159,7 +160,7 @@ class AddDialog extends React.Component {
 
   render() {
     const {
-      open, onClose, classes,
+      open, onClose, classes, 
     } = this.props;
     const { name, email, password, confirmPassword, loading } = this.state;
     const ans = [];

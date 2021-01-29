@@ -102,24 +102,25 @@ class Login extends React.Component {
             loading: true,
             hasError: true,
         });
-        const response = await callApi(data, 'post', 'user/login', true);
-        localStorage.set('token', response.data);
-        this.setState({ loading: false });
-        // const response = localStorage.get('token');
-        // console.log('respone', response);
-        const Token = localStorage.get('token');
-        if (Token !== 'undefined') {
+        const response = await callApi('user/login','post', data);
+        console.log('---rspn--',response);
+        if(response.data)
+        {
+            localStorage.set('token', response.data);
             this.setState({
                 redirect: true,
                 hasError: false,
                 message: 'Successfully Login!',
+                loading: false
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
             });
-        } else {
+        }
+         else {
             this.setState({
                 message: 'Login Failed, Record Not Found',
+                loading: false
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'error');
