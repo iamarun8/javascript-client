@@ -1,29 +1,3 @@
-// import React from 'react';
-// import CircularProgress from '@material-ui/core/CircularProgress';
-
-// const withLoaderAndMessage = (WrappedComponent) => (props) => {
-//     const { loader , dataLength, ...rest } = props;
-//     console.log('-loading-', props);
-//     if (loader) {
-//         return (
-//             <div paddingLeft="50%">
-//                 <CircularProgress />
-//             </div>
-//         );
-//     }
-//     if (!dataLength) {
-//         return (
-            // <div paddingLeft={50}>
-            //     <h2>Oops No more Trainees</h2>
-            // </div>
-//         );
-//     }
-//     return (<WrappedComponent loader={loader} dataLength={dataLength} {...rest} />);
-// };
-
-// export default withLoaderAndMessage;
-
-
 import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -39,7 +13,7 @@ export const withLoaderAndMessage = (WrappedComponent) => {
           </div>
         )}
         {!dataLength && (
-                <div paddingLeft={50}>
+                <div style={{textAlign: 'center'}}>
                     <h2>Oops No more Trainees</h2>
                 </div>
             )

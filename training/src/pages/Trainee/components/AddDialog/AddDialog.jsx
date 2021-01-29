@@ -4,7 +4,6 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextFiel
 import { Email, VisibilityOff, Person } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
-import localStorage from 'local-storage';
 import { MyContext } from '../../../../contexts'
 import callApi from '../../../../lib/utils/api';
 
@@ -118,7 +117,6 @@ class AddDialog extends React.Component {
   }
 
   onClickHandler = async (data, openSnackBar) => {
-    console.log('----data inside add dialog---',data);
     const { onClose } = this.props
       this.setState({
         loading: true,
@@ -251,7 +249,6 @@ export default withStyles(passwordStyle)(AddDialog);
 AddDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 

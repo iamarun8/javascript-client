@@ -10,7 +10,7 @@ const PrivateLayout = ({ children, ...rest }) => (
 );
 
 PrivateLayout.propTypes = {
-    children: PropTypes.objectOf(PropTypes.string).isRequired,
+    children: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default PrivateLayout;

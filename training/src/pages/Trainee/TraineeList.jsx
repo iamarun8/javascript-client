@@ -90,7 +90,7 @@ class TraineeList extends React.Component {
         console.log('Deleted Item ', deleteData);
     };
 
-    handleEditDialogOpen = (element)  => {
+    handleEditDialogOpen = (element) => {
         this.setState({
             EditOpen: true,
             editData: element,

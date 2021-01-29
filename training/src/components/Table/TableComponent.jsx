@@ -35,6 +35,8 @@ function TableComponent(props) {
         actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = props;
 
+    const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table}>
@@ -59,10 +61,7 @@ function TableComponent(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {(rowsPerPage > 0
-                        ? data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : data[0]
-                    ).map((item) => (
+                    {paginationData.map((item, index) => (
                         <TableRow className={classes.tableRow} key={item[id]}>
                             {
                                 columns && columns.length && columns.map(({ align, field, format }) => (
