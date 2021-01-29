@@ -98,19 +98,16 @@ class Login extends React.Component {
     }
 
     onClickHandler = async (data, openSnackBar) => {
-        console.log('Data is :', data);
         this.setState({
             loading: true,
             hasError: true,
         });
         const response = await callApi(data, 'post', 'user/login', true);
-        console.log('ResponseToken', response, '^^^^^^', response);
         localStorage.set('token', response.data);
         this.setState({ loading: false });
         // const response = localStorage.get('token');
         // console.log('respone', response);
         const Token = localStorage.get('token');
-        console.log('---token in login--',);
         if (Token !== 'undefined') {
             this.setState({
                 redirect: true,

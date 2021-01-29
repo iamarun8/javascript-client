@@ -7,7 +7,6 @@ import { EditDialog } from './components/EditDialog';
 import { DeleteDialog } from './components/DeleteDialog'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import trainees from './data/trainee';
 import { TableComponent } from '../../components/Table';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 import callApi from '../../lib/utils/api';
@@ -40,7 +39,6 @@ class TraineeList extends React.Component {
             limit: 20,
             skip: 0,
             dataObj: [[]],
-            loading: false,
         };
     }
 
@@ -132,6 +130,7 @@ class TraineeList extends React.Component {
     componentDidMount = () => {
         const { limit, skip, dataObj } = this.state;
         this.setState({ loading: true });
+        const { setLoading } = this.props;
         callApi({}, 'get', `trainee?skip=${skip}&limit=${limit}`).then((response) => {
             console.log('List Response', response);
             if (response === undefined) {
@@ -140,9 +139,11 @@ class TraineeList extends React.Component {
                     loading: false,
                     message: 'An error occured while displaying Trainee',
                 });
+                setLoading(false);
             } else {
                 const records = response.data;
                 this.setState({ dataObj: records, loading: false, Count: 100 });
+                setLoading(false);
                 console.log('dddddderrtyyuyuii----',records);
                 return records
             }
@@ -155,9 +156,77 @@ class TraineeList extends React.Component {
         const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
         console.log('dtOBJ', dataObj);
         const { classes } = this.props;
+        const { setLoading, currentstate } = this.props;
+        
         return (
             <>
-                <div className={classes.root}>
+            {
+                (!currentstate) && (
+                        <div className={classes.root}>
+                            <div className={classes.dialog}>
+                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                                    ADD TRAINEELIST
+                        </Button>
+                            </div>
+                            <AddDialog open={open} onClose={this.handleClose} onSubmit={this.handleSubmit} />
+                            <EditDialog
+                                Editopen={EditOpen}
+                                handleEditClose={this.handleEditClose}
+                                handleEdit={this.handleEdit}
+                                data={editData}
+                            />
+                            <DeleteDialog
+                                open={RemoveOpen}
+                                onClose={this.handleRemoveClose}
+                                onSubmit={this.handleRemove}
+                                data={deleteData}
+                            />
+                            <TableComponent
+                                id="id"
+                                data={dataObj || [[]] }
+                                columns={
+                                    [
+                                        {
+                                            field: 'name',
+                                            label: 'Name',
+                                        },
+                                        {
+                                            field: 'email',
+                                            label: 'Email Address',
+                                            format: value => value && value.toUpperCase(),
+                                        },
+                                        {
+                                            field: 'createdAt',
+                                            label: 'Date',
+                                            align: 'right',
+                                            format: getDateFormatted,
+                                        },
+                                    ]
+                                }
+                                actions={[
+                                    {
+                                        icon: <EditIcon />,
+                                        handler: this.handleEditDialogOpen,
+                                    },
+                                    {
+                                        icon: <DeleteIcon />,
+                                        handler: this.handleRemoveDialogOpen,
+                                    }
+                                ]}
+                                orderBy={orderBy}
+                                order={order}
+                                onSort={this.handleSort}
+                                onSelect={this.handleSelect}
+                                count={count}
+                                page={page}
+                                onChangePage={this.handleChangePage}
+                                rowsPerPage={rowsPerPage}
+                                onChangeRowsPerPage={this.handleChangesRowsPerPage}
+                            />
+                        </div>
+                )
+            }
+                {/* <div className={classes.root}>
                     <div className={classes.dialog}>
                         <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
                             ADD TRAINEELIST
@@ -179,7 +248,31 @@ class TraineeList extends React.Component {
                     <TableComponent
                         id="id"
                         loading={loading}
-                        data={dataObj || [[]] }
+                        // data={dataObj || [[]] }
+                        data={[
+                            [
+                                {
+                                    "_id": "600a90c9179d0e43e452a700",
+                                    "name": "head-trainer",
+                                    "email": "headtrainer@successive.tech",
+                                    "role": "head-trainer",
+                                    "password": "$2b$10$CBvVTXDzuwy7x573JTMIdOjPd10/ghYbS9hMxWBB8mrdCpGWOzfm.",
+                                    "originalId": "600a90c9179d0e43e452a700",
+                                    "createdAt": "2021-01-22T08:46:01.806Z",
+                                    "__v": 0
+                                },
+                                {
+                                    "_id": "600a90c9179d0e43e452a700",
+                                    "name": "head-trainer",
+                                    "email": "headtrainer@successive.tech",
+                                    "role": "head-trainer",
+                                    "password": "$2b$10$CBvVTXDzuwy7x573JTMIdOjPd10/ghYbS9hMxWBB8mrdCpGWOzfm.",
+                                    "originalId": "600a90c9179d0e43e452a700",
+                                    "createdAt": "2021-01-22T08:46:01.806Z",
+                                    "__v": 0
+                                }
+                            ]
+                        ]}
                         columns={
                             [
                                 {
@@ -219,7 +312,7 @@ class TraineeList extends React.Component {
                         rowsPerPage={rowsPerPage}
                         onChangeRowsPerPage={this.handleChangesRowsPerPage}
                     />
-                </div>
+                </div> */}
             </>
         );
     }
@@ -227,5 +320,7 @@ class TraineeList extends React.Component {
 TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    currentstate: PropTypes.func.isRequired,
+    setLoading: PropTypes.bool.isRequired
 };
 export default withStyles(useStyles)(IsLoadingHOC(TraineeList));

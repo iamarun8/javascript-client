@@ -141,31 +141,29 @@ function TableComponent(props) {
         id, columns, classes, order, orderBy, onSort, onSelect,
         actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = props;
-    console.log('------------------+++++++++++++++++++++++_____________________________',data);
+    console.log('--data--inside--TABLECOMPONENT--',data);
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
-                        {
-                            columns.length && columns.map(({
-                                align, field, lable,
-                            }) => (
-                                <TableCell
-                                    align={align}
-                                    className={classes.tableHeader}
-                                >
-                                    <TableSortLabel
-                                        active={orderBy === field}
-                                        direction={orderBy === field ? order : 'asc'}
-                                        onClick={onSort(field)}
-                                    >
-                                        {lable}
-                                    </TableSortLabel>
-                                </TableCell>
-                            ))
-                        }
+                        {columns.map((Data, index) => (
+                            <TableCell
+                                key={`tableRow1${index}`}
+                                className={classes.header}
+                                align={Data.align}
+                                sortDirection={orderBy === Data.label ? order : false}
+                            >
+                                <TableSortLabel
+                                    key={`tableRow2${index}`}
+                                    active={orderBy === Data.label}
+                                    direction={orderBy === Data.label ? order : 'asc'}
+                                    onClick={onSort(Data.label)}
+                                >{Data.label}
+                                </TableSortLabel>
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>

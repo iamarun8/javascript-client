@@ -118,11 +118,12 @@ class AddDialog extends React.Component {
   }
 
   onClickHandler = async (data, openSnackBar) => {
+    console.log('----data inside add dialog---',data);
       this.setState({
         loading: true,
         hasError: true,
       });
-      await callApi(data, 'post', 'trainee');
+      await callApi(data, 'post', 'trainee', true);
       this.setState({ loading: false });
       const Token = localStorage.get('token');
       console.log('-->AddDialog Token',Token);
@@ -145,12 +146,22 @@ class AddDialog extends React.Component {
       }
     }
 
+  formReset = () => {
+    this.setState({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      touched: {},
+    });
+  }
+
 
   render() {
     const {
       open, onClose, classes,
     } = this.props;
-    const { Name, Email, Password, ConfirmPassword, loading } = this.state;
+    const { name, email, password, confirmPassword, loading } = this.state;
     const ans = [];
     config.forEach((value) => {
       ans.push(
@@ -215,8 +226,9 @@ class AddDialog extends React.Component {
                     variant="contained"
                     onClick={() => {
                       this.onClickHandler({
-                        Name, Email, Password, ConfirmPassword
+                        name, email, password, confirmPassword
                       }, openSnackBar);
+                      this.formReset();
                     }}
                     disabled={this.hasErrors() || loading}
                   >
