@@ -31,7 +31,6 @@ export const withLoaderAndMessage = (WrappedComponent) => {
   function HOC(props) {
     const [loader, setloader] = useState(true);
     const [dataLength, setdataLength ] = useState(0);
-    console.log('setloader----',dataLength, loader);
     return (
       <>
         {loader && (

@@ -110,13 +110,6 @@ class TraineeList extends React.Component {
         console.log('Edited Item ', { name, email });
     };
 
-    handleChangesRowsPerPage = (event) => {
-        this.setState({
-            rowsPerPage: event.target.value,
-            page: 0,
-        });
-    };
-
     componentDidMount = () => {
         const { limit, skip } = this.state;
         const { setloader, setdataLength } = this.props;
@@ -128,22 +121,18 @@ class TraineeList extends React.Component {
                 setloader(false);
             } else {
                 this.setState({ dataObj: response.data, count: response.count  });
-                console.log('--set---',response.count);
                 setloader(false);
                 setdataLength(response.count);
                 return response.data
             }
-            console.log('--> dataObj Response : ', response.data);
         });
     }
 
 
     render() {
         const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
-        console.log('dtOBJ', dataObj);
         const { classes } = this.props;
         const { loader, dataLength } = this.props;
-        
         return (
             <>
             {
@@ -155,6 +144,7 @@ class TraineeList extends React.Component {
                         </Button>
                             </div>
                             <AddDialog open={open} onClose={this.handleClose} />
+                            <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
@@ -207,7 +197,6 @@ class TraineeList extends React.Component {
                                 page={page}
                                 onChangePage={this.handleChangePage}
                                 rowsPerPage={rowsPerPage}
-                                onChangeRowsPerPage={this.handleChangesRowsPerPage}
                             />
                         </div>
                 )

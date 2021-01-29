@@ -103,7 +103,6 @@ class Login extends React.Component {
             hasError: true,
         });
         const response = await callApi('user/login','post', data);
-        console.log('---rspn--',response);
         if(response.data)
         {
             localStorage.set('token', response.data);

@@ -1,109 +1,3 @@
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// import {
-//     Table, TableCell, TableContainer, TableHead, TableRow, withStyles, TableBody,
-//     TableSortLabel, TablePagination, IconButton,
-// } from '@material-ui/core';
-// // import { hoc } from '../HOC/index';
-
-// const useStyles = (theme) => ({
-//     table: {
-//         minWidth: 650,
-//     },
-//     header: {
-//         color: 'grey',
-//     },
-//     root: {
-//         '&:nth-of-type(odd)': {
-//             backgroundColor: theme.palette.action.hover,
-//         },
-//         '&:hover': {
-//             backgroundColor: 'rgb(200,200,200)',
-//             cursor: 'pointer',
-//         },
-//     },
-
-// });
-
-// function TableComponent(props) {
-//     const {classes, data, column, order, orderBy, onSort, onSelect, count, page, actions,rowsPerPage, onChangePage, onChangeRowsPerPage} = props;
-//     return (
-//         <TableContainer>
-//             <Table className={classes.table}>
-//                 <TableHead>
-//                     <TableRow key={data.id}>
-//                         {column.map((Data, index) => (
-//                             <TableCell
-//                                 key={`tableRow1${index}`}
-//                                 className={classes.header}
-//                                 align={Data.align}
-//                                 sortDirection={orderBy === Data.label ? order : false}
-//                             >
-//                                 <TableSortLabel
-//                                     key={`tableRow2${index}`}
-//                                     active={orderBy === Data.label}
-//                                     direction={orderBy === Data.label ? order : 'asc'}
-//                                     onClick={onSort(Data.label)}
-//                                 >{Data.label}
-//                                 </TableSortLabel>
-//                             </TableCell>
-//                         ))}
-//                     </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                     {data.map((element) => (
-//                         <TableRow
-//                             key={element.id}
-//                             className={classes.root}
-//                         >
-//                             {column.map(({ field, align, format }, index) => (
-//                                 <TableCell onClick={() => onSelect(element)} key={`tableRow3_${index}`} align={align}>{format !== undefined ? format(element[field]) : element[field]}</TableCell>
-//                             ))}
-//                             {actions.map(({ icon, handler }, index) => (
-//                                 <IconButton key={`tableRow4_${index}`} onClick={handler(element)} className={classes.action}>{icon}</IconButton>
-//                             ))}
-//                         </TableRow>
-//                     ))}
-//                 </TableBody>
-//             </Table>
-//             {
-//                 (count === 0) ? '' : <TablePagination
-//                     component="div"
-//                     rowsPerPageOptions={[0]}
-//                     count={count}
-//                     rowsPerPage={rowsPerPage}
-//                     page={page}
-//                     onChangePage={onChangePage}
-//                     onChangeRowsPerPage={onChangeRowsPerPage}
-//                 />
-//             }
-            
-//         </TableContainer>
-//     );
-// }
-// TableComponent.propTypes = {
-//     classes: PropTypes.objectOf(PropTypes.string).isRequired,
-//     column: PropTypes.arrayOf(PropTypes.object).isRequired,
-//     order: PropTypes.string,
-//     orderBy: PropTypes.string,
-//     onSort: PropTypes.func,
-//     actions: PropTypes.arrayOf(PropTypes.object).isRequired,
-//     count: PropTypes.number.isRequired,
-//     onChangePage: PropTypes.func.isRequired,
-//     page: PropTypes.number.isRequired,
-//     rowsPerPage: PropTypes.number.isRequired,
-//     onSelect: PropTypes.func.isRequired,
-//     onChangeRowsPerPage: PropTypes.func.isRequired,
-// };
-// TableComponent.defaultProps = {
-//     order: 'asc',
-//     orderBy: '',
-//     onSort: () => { },
-// };
-// export default withStyles(useStyles)(TableComponent);
-
-
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -112,7 +6,6 @@ import {
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Button from '@material-ui/core/Button';
 import TablePagination from '@material-ui/core/TablePagination';
-// import { hoc } from '../HOC/index';
 
 const useStyles = (theme) => ({
     tableContainer: {
@@ -141,7 +34,6 @@ function TableComponent(props) {
         id, columns, classes, order, orderBy, onSort, onSelect,
         actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
     } = props;
-    // console.log('--data--inside--TABLECOMPONENT--',data);
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
@@ -167,7 +59,10 @@ function TableComponent(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data[0].map((item) => (
+                    {(rowsPerPage > 0
+                        ? data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        : data[0]
+                    ).map((item) => (
                         <TableRow className={classes.tableRow} key={item[id]}>
                             {
                                 columns && columns.length && columns.map(({ align, field, format }) => (
@@ -193,7 +88,7 @@ function TableComponent(props) {
                 {
                     (count === 0) ? '' : (
                         <TablePagination
-                            rowsPerPageOptions={[0]}
+                            rowsPerPageOptions={[10]}
                             count={count}
                             rowsPerPage={rowsPerPage}
                             page={page}
