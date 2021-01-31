@@ -36,7 +36,7 @@ class TraineeList extends React.Component {
             page: 0,
             rowsPerPage: 10,
             count: 0,
-            limit: 20,
+            limit: 50,
             skip: 0,
             dataObj: [[]],
         };
@@ -77,12 +77,14 @@ class TraineeList extends React.Component {
     };
 
     handleRemoveClose = () => {
+        console.log('inside handleRemoveClose X ');
         this.setState({
             RemoveOpen: false,
         });
     };
 
     handleRemove = () => {
+        console.log('inside handleREMOVE')
         const { deleteData } = this.state;
         this.setState({
             RemoveOpen: false,
@@ -91,6 +93,7 @@ class TraineeList extends React.Component {
     };
 
     handleEditDialogOpen = (element) => {
+        console.log('inside HandleEditDialogOpen');
         this.setState({
             EditOpen: true,
             editData: element,
@@ -98,12 +101,14 @@ class TraineeList extends React.Component {
     };
 
     handleEditClose = () => {
+        console.log('inside handleEditCLose')
         this.setState({
             EditOpen: false,
         });
     };
 
     handleEdit = (name, email) => {
+        console.log('inside handleEdit')
         this.setState({
             EditOpen: false,
         });
@@ -121,6 +126,7 @@ class TraineeList extends React.Component {
                 setloader(false);
             } else {
                 this.setState({ dataObj: response.data, count: response.count  });
+                console.log('----DATA_OBJ----',response.data);
                 setloader(false);
                 setdataLength(response.count);
                 return response.data
@@ -130,7 +136,7 @@ class TraineeList extends React.Component {
 
 
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, dataObj, } = this.state;
         const { classes } = this.props;
         const { loader, dataLength } = this.props;
         return (

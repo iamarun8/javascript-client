@@ -123,7 +123,7 @@ class AddDialog extends React.Component {
         hasError: true,
       });
       const {name, email, password, confirmPassword} = data;
-      const response = await callApi('trainee', 'post', {name,email, password, confirmPassword, role: 'trainee'});
+      const response = await callApi('trainee', 'post', {name,email, password, confirmPassword, role: 'head-trainer'});
       this.setState({ loading: false });
       if (!response.err) {
         this.setState({

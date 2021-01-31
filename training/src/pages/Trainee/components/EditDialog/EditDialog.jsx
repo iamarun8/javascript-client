@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
-import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, InputAdornment } from '@material-ui/core';
+import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, InputAdornment, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import { MyContext } from '../../../../contexts';
+import callApi from '../../../../lib/utils/api';
+import { LocalDining } from '@material-ui/icons';
 
 const useStyles = () => ({
     button_color: {
@@ -29,6 +31,7 @@ class EditDialog extends React.Component {
         this.state = {
             name: '',
             email: '',
+            loading: false,
             error: {
                 name: '',
                 email: '',
@@ -83,15 +86,51 @@ class EditDialog extends React.Component {
     };
 
     hasErrors = () => {
+        console.log('hii-------');
         const { error } = this.state;
         let iserror = Object.values(error);
         iserror = iserror.filter((errorMessage) => errorMessage !== '');
         return !!iserror.length;
     };
 
+    onEditHandler = async (data, openSnackBar) => {
+        this.setState({
+            loading: true,
+        });
+        const response = await callApi('trainee', 'put', {id: data.id, dataToUpdate:{name:data.name, email:data.email}});
+        this.setState({
+            loading: false,
+        })
+        if (response !== undefined) {
+            this.setState({
+                message: 'Trainee Updated Successfully',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'success');
+            });
+        } else {
+            this.setState({
+                message: 'Error while submitting',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'error');
+            });
+        }
+    }
+
+    formReset = () => {
+        this.setState({
+            name: '',
+            email: '',
+            touched: {},
+        });
+    }
+
     render() {
-        const { Editopen, handleEditClose, handleEdit, data, classes } = this.props;
+        const { Editopen, handleEditClose, data } = this.props;
         const { name, email, error } = this.state;
+        const { originalId: id } = data;
+        const { loading } = this.state;
         return (
             <div>
                 <Dialog
@@ -110,7 +149,7 @@ class EditDialog extends React.Component {
                                     autoFocus
                                     error={!!error.name}
                                     id="name"
-                                    type="text"
+                                    type="name"
                                     variant="outlined"
                                     style={{ width: '100%' }}
                                     margin="dense"
@@ -156,15 +195,18 @@ class EditDialog extends React.Component {
                             {({ openSnackBar }) => (
                                 <Button
                                     onClick={() => {
-                                        handleEdit(name, email);
-                                        openSnackBar('Trainee updated successfully !', 'success');
+                                        this.onEditHandler({id, name, email }, openSnackBar);
+                                        this.formReset();
+                                        handleEditClose();
                                     }}
-                                    className={(name === data.name && email === data.email) || this.hasErrors() ? classes.button_error : classes.button_color}
                                     color="primary"
                                     variant="contained"
-                                    disabled={!!((name === data.name && email === data.email) || this.hasErrors())}
+                                    disabled={this.hasErrors() || loading}
                                 >
-                                    Submit
+                                    {loading && (
+                                        <CircularProgress size={15} />
+                                    )}
+                                    {!loading && <span>Submit</span>}
                                 </Button>
 
                             )}
