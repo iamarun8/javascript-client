@@ -4,8 +4,9 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import PropTypes from 'prop-types';
-import * as moment from 'moment';
 import { MyContext } from '../../../../contexts/index';
 import callApi from '../../../../lib/utils/api';
 
@@ -25,16 +26,22 @@ class DeleteDialog extends Component {
     };
 
     onDeleteHandler = async (data, openSnackBar) => {
+        const { databs } = this.props;
+        this.setState({
+            loading: true,
+        })
         const { originalId } = data.data;
         console.log('original_Id : ', originalId)
         const response = await callApi(`trainee/${originalId}`, 'delete', {});
         console.log('Response in Delete_Dialog :', response.data,' -- ',response);
+        this.setState({ loading: false});
         if (response != undefined) {
             this.setState({
                 message: 'Trainee Deleted Successfully ',
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
+                databs();
             });
         } else {
             this.setState({
@@ -50,6 +57,7 @@ class DeleteDialog extends Component {
 
     render() {
         const { open, onClose, onSubmit, data } = this.props;
+        const { loading } = this.state;
         return (
             <Dialog
                 open={open}
@@ -75,7 +83,11 @@ class DeleteDialog extends Component {
                                         onSubmit({ data });
                                     }}
                                 >
-                                    Delete
+                                    
+                                    {loading && (
+                                        <CircularProgress size={15} />
+                                    )}
+                                    {!loading && <span>Delete</span>}
                                 </Button>
                             )}
                         </MyContext.Consumer>

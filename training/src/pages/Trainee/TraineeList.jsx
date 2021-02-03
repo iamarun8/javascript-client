@@ -115,6 +115,7 @@ class TraineeList extends React.Component {
         console.log('Edited Item ', { name, email });
     };
 
+
     componentDidMount = () => {
         const { limit, skip } = this.state;
         const { setloader, setdataLength } = this.props;
@@ -139,29 +140,32 @@ class TraineeList extends React.Component {
         const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, dataObj, } = this.state;
         const { classes } = this.props;
         const { loader, dataLength } = this.props;
+        console.log('--loader--',loader);
         return (
             <>
             {
                 (!loader) && (
                         <div className={classes.root}>
                             <div className={classes.dialog}>
-                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen} >
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose} />
+                            <AddDialog open={open} onClose={this.handleClose} dbs={this.componentDidMount}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
+                                dtbs={this.componentDidMount}
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
+                                databs={this.componentDidMount}
                             />
                             <TableComponent
                                 id="id"

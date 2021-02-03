@@ -8,7 +8,6 @@ import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import { MyContext } from '../../../../contexts';
 import callApi from '../../../../lib/utils/api';
-import { LocalDining } from '@material-ui/icons';
 
 const useStyles = () => ({
     button_color: {
@@ -20,12 +19,12 @@ const useStyles = () => ({
     },
 });
 
-class EditDialog extends React.Component {
-    schema = yup.object().shape({
-        name: yup.string().required('Name is required').min(3),
-        email: yup.string().email().required('Email is required'),
-    });
+const schema = yup.object().shape({
+    name: yup.string().required('Name is required').min(3),
+    email: yup.string().email().required('Email is required'),
+});
 
+class EditDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +35,7 @@ class EditDialog extends React.Component {
                 name: '',
                 email: '',
             },
-            hasErrors: false,
+            hasError: false,
             touched: {
                 name: false,
                 email: false,
@@ -45,6 +44,7 @@ class EditDialog extends React.Component {
     }
 
     handleSet = () => {
+        console.log('--handleSet--');
         const { data } = this.props;
         this.setState({
             name: data.name,
@@ -53,6 +53,7 @@ class EditDialog extends React.Component {
     };
 
     handleOnChange = (prop) => (event) => {
+        console.log('---handleOnChange---');
         this.setState({
             [prop]: event.target.value,
         });
@@ -60,8 +61,7 @@ class EditDialog extends React.Component {
 
     getError = (field) => {
         const { error } = this.state;
-        this.schema
-            .validateAt(field, this.state)
+        schema.validateAt(field, this.state)
             .then(() => {
                 if (error[field] !== '') {
                     this.setState({
@@ -85,31 +85,57 @@ class EditDialog extends React.Component {
         return error[field];
     };
 
+    // hasErrors = () => {
+    //     console.log('hii-------');
+    //     const { error } = this.state;
+    //     let iserror = Object.values(error);
+    //     iserror = iserror.filter((errorMessage) => errorMessage !== '');
+    //     return !!iserror.length;
+    // };
+
+    // hasErrors = () => {
+    //     console.log('hi----');
+    //     const { hasError } = this.state;
+    //     schema.isValid(this.state)
+    //         .then((valid) => {
+    //             if (!valid !== hasError) {
+    //                 this.setState({ hasError: !valid });
+    //             }
+    //         });
+    // }
+
     hasErrors = () => {
-        console.log('hii-------');
-        const { error } = this.state;
-        let iserror = Object.values(error);
-        iserror = iserror.filter((errorMessage) => errorMessage !== '');
-        return !!iserror.length;
-    };
+        try {
+            schema.validateSync(this.state);
+        } catch (err) {
+            return true;
+        }
+        return false;
+    }
 
     onEditHandler = async (data, openSnackBar) => {
+        const { handleEditClose, dtbs } = this.props
         this.setState({
             loading: true,
+            hasError: true,
         });
         const response = await callApi('trainee', 'put', {id: data.id, dataToUpdate:{name:data.name, email:data.email}});
         this.setState({
             loading: false,
         })
         if (response !== undefined) {
+            handleEditClose();
             this.setState({
+                hasError: false,
                 message: 'Trainee Updated Successfully',
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
+                dtbs();
             });
         } else {
             this.setState({
+                hasError: false,
                 message: 'Error while submitting',
             }, () => {
                 const { message } = this.state;
@@ -118,13 +144,6 @@ class EditDialog extends React.Component {
         }
     }
 
-    formReset = () => {
-        this.setState({
-            name: '',
-            email: '',
-            touched: {},
-        });
-    }
 
     render() {
         const { Editopen, handleEditClose, data } = this.props;
@@ -196,12 +215,10 @@ class EditDialog extends React.Component {
                                 <Button
                                     onClick={() => {
                                         this.onEditHandler({id, name, email }, openSnackBar);
-                                        this.formReset();
-                                        handleEditClose();
                                     }}
                                     color="primary"
                                     variant="contained"
-                                    disabled={this.hasErrors() || loading}
+                                    disabled={ this.hasErrors() || loading}
                                 >
                                     {loading && (
                                         <CircularProgress size={15} />
