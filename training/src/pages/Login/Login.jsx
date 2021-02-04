@@ -5,7 +5,7 @@ import {
     CardContent, Typography, Card, Avatar, CssBaseline, withStyles,
     CircularProgress,
 } from '@material-ui/core';
-import { Email, VisibilityOff, LockOutlined, TrainRounded } from '@material-ui/icons';
+import { Email, VisibilityOff, LockOutlined } from '@material-ui/icons';
 import * as yup from 'yup';
 import localStorage from 'local-storage';
 import { Redirect } from 'react-router-dom';

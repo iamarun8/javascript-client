@@ -4,9 +4,11 @@ import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import PropTypes from 'prop-types';
-import * as moment from 'moment';
 import { MyContext } from '../../../../contexts/index';
+import callApi from '../../../../lib/utils/api';
 
 class DeleteDialog extends Component {
     constructor(props) {
@@ -23,16 +25,21 @@ class DeleteDialog extends Component {
         this.setState({ open: false });
     };
 
-    handleSnackBarMessage = (data, openSnackBar) => {
-        const date = '2019-02-12T18:15:11.778Z';
-        const isAfter = (moment(data.createdAt).isAfter(date));
-        console.log(isAfter, data.createdAt);
-        if (isAfter) {
+    onDeleteHandler = async (data, openSnackBar) => {
+        const { fetcheddata } = this.props;
+        this.setState({
+            loading: true,
+        })
+        const { originalId } = data.data;
+        const response = await callApi(`trainee/${originalId}`, 'delete', {});
+        this.setState({ loading: false});
+        if (response != undefined) {
             this.setState({
-                message: 'Deleted Trainee Successfully ',
+                message: 'Trainee Deleted Successfully ',
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
+                fetcheddata();
             });
         } else {
             this.setState({
@@ -46,10 +53,11 @@ class DeleteDialog extends Component {
 
     render() {
         const { open, onClose, onSubmit, data } = this.props;
+        const { loading } = this.state;
         return (
             <Dialog
                 open={open}
-                onClose={() => this.handleClose()}
+                onClose={()=>this.handleClose()}
                 fullWidth
             >
                 <DialogTitle id="form-dialog-title">Remove Trainee</DialogTitle>
@@ -63,11 +71,14 @@ class DeleteDialog extends Component {
                                     color="primary"
                                     variant="contained"
                                     onClick={() => {
+                                        this.onDeleteHandler({ data }, openSnackBar);
                                         onSubmit({ data });
-                                        this.handleSnackBarMessage(data, openSnackBar);
                                     }}
-                                >
-                                    Delete
+                                > 
+                                    {loading && (
+                                        <CircularProgress size={15} />
+                                    )}
+                                    {!loading && <span>Delete</span>}
                                 </Button>
                             )}
                         </MyContext.Consumer>

@@ -36,7 +36,7 @@ class TraineeList extends React.Component {
             page: 0,
             rowsPerPage: 10,
             count: 0,
-            limit: 20,
+            limit: 50,
             skip: 0,
             dataObj: [[]],
         };
@@ -87,7 +87,6 @@ class TraineeList extends React.Component {
         this.setState({
             RemoveOpen: false,
         });
-        console.log('Deleted Item ', deleteData);
     };
 
     handleEditDialogOpen = (element) => {
@@ -107,10 +106,9 @@ class TraineeList extends React.Component {
         this.setState({
             EditOpen: false,
         });
-        console.log('Edited Item ', { name, email });
     };
 
-    componentDidMount = () => {
+    fetchData = () => {
         const { limit, skip } = this.state;
         const { setloader, setdataLength } = this.props;
         callApi(`trainee?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
@@ -120,7 +118,7 @@ class TraineeList extends React.Component {
                 });
                 setloader(false);
             } else {
-                this.setState({ dataObj: response.data, count: response.count  });
+                this.setState({ dataObj: response.data, count: response.count });
                 setloader(false);
                 setdataLength(response.count);
                 return response.data
@@ -128,34 +126,40 @@ class TraineeList extends React.Component {
         });
     }
 
+    componentDidMount = () => {
+        this.fetchData();
+    }
 
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, loading, dataObj, count } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, dataObj, } = this.state;
         const { classes } = this.props;
         const { loader, dataLength } = this.props;
+        if(!dataLength) return null; 
         return (
             <>
             {
                 (!loader) && (
                         <div className={classes.root}>
                             <div className={classes.dialog}>
-                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                                <Button variant="outlined" color="primary" onClick={this.handleClickOpen} >
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose} />
+                            <AddDialog open={open} onClose={this.handleClose} fetcheddata={this.fetchData}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
+                                fetcheddata={this.fetchData}
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
+                                fetcheddata={this.fetchData}
                             />
                             <TableComponent
                                 id="id"

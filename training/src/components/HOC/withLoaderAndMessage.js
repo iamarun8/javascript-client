@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-export const withLoaderAndMessage = (WrappedComponent) => {
+const withLoaderAndMessage = (WrappedComponent) => {
   function HOC(props) {
     const [loader, setloader] = useState(true);
     const [dataLength, setdataLength ] = useState(0);

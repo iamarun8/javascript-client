@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
-import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, InputAdornment } from '@material-ui/core';
+import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, InputAdornment, CircularProgress } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import { MyContext } from '../../../../contexts';
+import callApi from '../../../../lib/utils/api';
 
 const useStyles = () => ({
     button_color: {
@@ -18,22 +19,23 @@ const useStyles = () => ({
     },
 });
 
-class EditDialog extends React.Component {
-    schema = yup.object().shape({
-        name: yup.string().required('Name is required').min(3),
-        email: yup.string().email().required('Email is required'),
-    });
+const schema = yup.object().shape({
+    name: yup.string().required('Name is required').min(3),
+    email: yup.string().email().required('Email is required'),
+});
 
+class EditDialog extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             email: '',
+            loading: false,
             error: {
                 name: '',
                 email: '',
             },
-            hasErrors: false,
+            hasError: false,
             touched: {
                 name: false,
                 email: false,
@@ -57,8 +59,7 @@ class EditDialog extends React.Component {
 
     getError = (field) => {
         const { error } = this.state;
-        this.schema
-            .validateAt(field, this.state)
+        schema.validateAt(field, this.state)
             .then(() => {
                 if (error[field] !== '') {
                     this.setState({
@@ -83,15 +84,51 @@ class EditDialog extends React.Component {
     };
 
     hasErrors = () => {
-        const { error } = this.state;
-        let iserror = Object.values(error);
-        iserror = iserror.filter((errorMessage) => errorMessage !== '');
-        return !!iserror.length;
-    };
+        try {
+            schema.validateSync(this.state);
+        } catch (err) {
+            return true;
+        }
+        return false;
+    }
+
+    onEditHandler = async (data, openSnackBar) => {
+        const { handleEditClose, fetcheddata } = this.props
+        this.setState({
+            loading: true,
+            hasError: true,
+        });
+        const response = await callApi('trainee', 'put', {id: data.id, dataToUpdate:{name:data.name, email:data.email}});
+        this.setState({
+            loading: false,
+        })
+        if (response !== undefined) {
+            handleEditClose();
+            this.setState({
+                hasError: false,
+                message: 'Trainee Updated Successfully',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'success');
+                fetcheddata();
+            });
+        } else {
+            this.setState({
+                hasError: false,
+                message: 'Error while submitting',
+            }, () => {
+                const { message } = this.state;
+                openSnackBar(message, 'error');
+            });
+        }
+    }
+
 
     render() {
-        const { Editopen, handleEditClose, handleEdit, data, classes } = this.props;
+        const { Editopen, handleEditClose, data } = this.props;
         const { name, email, error } = this.state;
+        const { originalId: id } = data;
+        const { loading } = this.state;
         return (
             <div>
                 <Dialog
@@ -110,7 +147,7 @@ class EditDialog extends React.Component {
                                     autoFocus
                                     error={!!error.name}
                                     id="name"
-                                    type="text"
+                                    type="name"
                                     variant="outlined"
                                     style={{ width: '100%' }}
                                     margin="dense"
@@ -156,15 +193,16 @@ class EditDialog extends React.Component {
                             {({ openSnackBar }) => (
                                 <Button
                                     onClick={() => {
-                                        handleEdit(name, email);
-                                        openSnackBar('Trainee updated successfully !', 'success');
+                                        this.onEditHandler({id, name, email }, openSnackBar);
                                     }}
-                                    className={(name === data.name && email === data.email) || this.hasErrors() ? classes.button_error : classes.button_color}
                                     color="primary"
                                     variant="contained"
-                                    disabled={!!((name === data.name && email === data.email) || this.hasErrors())}
+                                    disabled={ this.hasErrors() || loading}
                                 >
-                                    Submit
+                                    {loading && (
+                                        <CircularProgress size={15} />
+                                    )}
+                                    {!loading && <span>Submit</span>}
                                 </Button>
 
                             )}

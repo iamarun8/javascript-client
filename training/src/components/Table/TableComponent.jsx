@@ -6,6 +6,7 @@ import {
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Button from '@material-ui/core/Button';
 import TablePagination from '@material-ui/core/TablePagination';
+import { withLoaderAndMessage } from '../../components/HOC/index'
 
 const useStyles = (theme) => ({
     tableContainer: {
@@ -36,7 +37,6 @@ function TableComponent(props) {
     } = props;
 
     const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table}>
