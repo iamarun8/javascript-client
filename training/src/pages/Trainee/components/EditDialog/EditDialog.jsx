@@ -44,7 +44,6 @@ class EditDialog extends React.Component {
     }
 
     handleSet = () => {
-        console.log('--handleSet--');
         const { data } = this.props;
         this.setState({
             name: data.name,
@@ -53,7 +52,6 @@ class EditDialog extends React.Component {
     };
 
     handleOnChange = (prop) => (event) => {
-        console.log('---handleOnChange---');
         this.setState({
             [prop]: event.target.value,
         });
@@ -85,25 +83,6 @@ class EditDialog extends React.Component {
         return error[field];
     };
 
-    // hasErrors = () => {
-    //     console.log('hii-------');
-    //     const { error } = this.state;
-    //     let iserror = Object.values(error);
-    //     iserror = iserror.filter((errorMessage) => errorMessage !== '');
-    //     return !!iserror.length;
-    // };
-
-    // hasErrors = () => {
-    //     console.log('hi----');
-    //     const { hasError } = this.state;
-    //     schema.isValid(this.state)
-    //         .then((valid) => {
-    //             if (!valid !== hasError) {
-    //                 this.setState({ hasError: !valid });
-    //             }
-    //         });
-    // }
-
     hasErrors = () => {
         try {
             schema.validateSync(this.state);
@@ -114,7 +93,7 @@ class EditDialog extends React.Component {
     }
 
     onEditHandler = async (data, openSnackBar) => {
-        const { handleEditClose, dtbs } = this.props
+        const { handleEditClose, fetcheddata } = this.props
         this.setState({
             loading: true,
             hasError: true,
@@ -131,7 +110,7 @@ class EditDialog extends React.Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
-                dtbs();
+                fetcheddata();
             });
         } else {
             this.setState({

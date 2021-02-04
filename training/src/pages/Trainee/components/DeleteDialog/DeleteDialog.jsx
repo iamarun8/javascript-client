@@ -26,14 +26,12 @@ class DeleteDialog extends Component {
     };
 
     onDeleteHandler = async (data, openSnackBar) => {
-        const { databs } = this.props;
+        const { fetcheddata } = this.props;
         this.setState({
             loading: true,
         })
         const { originalId } = data.data;
-        console.log('original_Id : ', originalId)
         const response = await callApi(`trainee/${originalId}`, 'delete', {});
-        console.log('Response in Delete_Dialog :', response.data,' -- ',response);
         this.setState({ loading: false});
         if (response != undefined) {
             this.setState({
@@ -41,7 +39,7 @@ class DeleteDialog extends Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
-                databs();
+                fetcheddata();
             });
         } else {
             this.setState({
@@ -52,8 +50,6 @@ class DeleteDialog extends Component {
             });
         }
     }
-
-
 
     render() {
         const { open, onClose, onSubmit, data } = this.props;
@@ -74,16 +70,11 @@ class DeleteDialog extends Component {
                                 <Button
                                     color="primary"
                                     variant="contained"
-                                    // onClick={() => {
-                                    //     onSubmit({ data });
-                                    //     this.handleSnackBarMessage(data, openSnackBar);
-                                    // }}
                                     onClick={() => {
                                         this.onDeleteHandler({ data }, openSnackBar);
                                         onSubmit({ data });
                                     }}
-                                >
-                                    
+                                > 
                                     {loading && (
                                         <CircularProgress size={15} />
                                     )}

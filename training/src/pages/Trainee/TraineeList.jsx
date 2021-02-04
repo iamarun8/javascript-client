@@ -77,23 +77,19 @@ class TraineeList extends React.Component {
     };
 
     handleRemoveClose = () => {
-        console.log('inside handleRemoveClose X ');
         this.setState({
             RemoveOpen: false,
         });
     };
 
     handleRemove = () => {
-        console.log('inside handleREMOVE')
         const { deleteData } = this.state;
         this.setState({
             RemoveOpen: false,
         });
-        console.log('Deleted Item ', deleteData);
     };
 
     handleEditDialogOpen = (element) => {
-        console.log('inside HandleEditDialogOpen');
         this.setState({
             EditOpen: true,
             editData: element,
@@ -101,22 +97,18 @@ class TraineeList extends React.Component {
     };
 
     handleEditClose = () => {
-        console.log('inside handleEditCLose')
         this.setState({
             EditOpen: false,
         });
     };
 
     handleEdit = (name, email) => {
-        console.log('inside handleEdit')
         this.setState({
             EditOpen: false,
         });
-        console.log('Edited Item ', { name, email });
     };
 
-
-    componentDidMount = () => {
+    fetchData = () => {
         const { limit, skip } = this.state;
         const { setloader, setdataLength } = this.props;
         callApi(`trainee?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
@@ -126,8 +118,7 @@ class TraineeList extends React.Component {
                 });
                 setloader(false);
             } else {
-                this.setState({ dataObj: response.data, count: response.count  });
-                console.log('----DATA_OBJ----',response.data);
+                this.setState({ dataObj: response.data, count: response.count });
                 setloader(false);
                 setdataLength(response.count);
                 return response.data
@@ -135,12 +126,15 @@ class TraineeList extends React.Component {
         });
     }
 
+    componentDidMount = () => {
+        this.fetchData();
+    }
 
     render() {
         const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, dataObj, } = this.state;
         const { classes } = this.props;
         const { loader, dataLength } = this.props;
-        console.log('--loader--',loader);
+        if(!dataLength) return null; 
         return (
             <>
             {
@@ -151,21 +145,21 @@ class TraineeList extends React.Component {
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose} dbs={this.componentDidMount}/>
+                            <AddDialog open={open} onClose={this.handleClose} fetcheddata={this.fetchData}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
-                                dtbs={this.componentDidMount}
+                                fetcheddata={this.fetchData}
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
-                                databs={this.componentDidMount}
+                                fetcheddata={this.fetchData}
                             />
                             <TableComponent
                                 id="id"
