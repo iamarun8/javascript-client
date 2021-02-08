@@ -6,7 +6,6 @@ import {
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Button from '@material-ui/core/Button';
 import TablePagination from '@material-ui/core/TablePagination';
-import { withLoaderAndMessage } from '../../components/HOC/index'
 
 const useStyles = (theme) => ({
     tableContainer: {
@@ -33,7 +32,7 @@ const useStyles = (theme) => ({
 function TableComponent(props) {
     const {
         id, columns, classes, order, orderBy, onSort, onSelect,
-        actions, data, count, rowsPerPage, page, onChangePage, onChangeRowsPerPage,
+        actions, data, count, rowsPerPage, page, onChangePage,
     } = props;
 
     const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -120,4 +119,4 @@ TableComponent.defaultProps = {
     orderBy: '',
     data:[]
 };
-export default withStyles(useStyles)((TableComponent));
+export default withStyles(useStyles)(TableComponent);
