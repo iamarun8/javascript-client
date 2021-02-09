@@ -33,7 +33,7 @@ class DeleteDialog extends Component {
         const { originalId } = data.data;
         const response = await callApi(`trainee/${originalId}`, 'delete', {});
         this.setState({ loading: false});
-        if (response != undefined) {
+        if (response !== undefined) {
             this.setState({
                 message: 'Trainee Deleted Successfully ',
             }, () => {

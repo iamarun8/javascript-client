@@ -83,7 +83,6 @@ class TraineeList extends React.Component {
     };
 
     handleRemove = () => {
-        const { deleteData } = this.state;
         this.setState({
             RemoveOpen: false,
         });
