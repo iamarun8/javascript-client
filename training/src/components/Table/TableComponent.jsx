@@ -34,7 +34,7 @@ function TableComponent(props) {
         id, columns, classes, order, orderBy, onSort, onSelect,
         actions, data, count, rowsPerPage, page, onChangePage,
     } = props;
-
+    console.log('--TABLE--',data);
     const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>

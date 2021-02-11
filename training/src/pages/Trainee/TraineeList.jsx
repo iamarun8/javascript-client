@@ -101,6 +101,10 @@ class TraineeList extends React.Component {
         });
     };
 
+    // componentDidMount() => {
+
+    // }
+
     handleEditClose = () => {
         this.setState({
             EditOpen: false,
@@ -116,14 +120,15 @@ class TraineeList extends React.Component {
     render() {
         const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, } = this.state;
         const { classes } = this.props;
-        const { loader, dataLength } = this.props;
+        const { loader, dataLength, setdataLength, setloader } = this.props;
         const{  
-                getAllTrainees: { data = [[]], traineeCount } = {},
-                refetch,
+                data : {getAllTrainees: { data = [], count } = {},
+                refetch},
         } = this.props;
-        console.log('22222222222', data.getAllTrainees);
-        console.log('trainee data: ',this.props.data.getAllTrainees);
-        console.log('--record in traineelist--->',this.props);
+        if(count){
+            setloader(false);
+            setdataLength(count);            
+        }
         if(!dataLength) return null; 
         return (
             <>
@@ -142,14 +147,13 @@ class TraineeList extends React.Component {
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
-                                // fetcheddata={this.fetchData}
+
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
-                                // fetcheddata={this.fetchData}
                             />
                             <TableComponent
                                 id="id"
