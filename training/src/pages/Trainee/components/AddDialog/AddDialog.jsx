@@ -117,7 +117,7 @@ class AddDialog extends React.Component {
   }
 
   onClickHandler = async (data, openSnackBar) => {
-    const { onClose, fetcheddata } = this.props
+    const { onClose } = this.props
       this.setState({
         loading: true,
         hasError: true,
@@ -132,7 +132,6 @@ class AddDialog extends React.Component {
         }, () => {
           const { message } = this.state;
           openSnackBar(message, 'success');
-          fetcheddata();
         });
       } else {
         this.setState({

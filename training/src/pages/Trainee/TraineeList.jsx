@@ -193,7 +193,7 @@ class TraineeList extends React.Component {
                                 onSelect={this.handleSelect}
                                 count={dataLength}
                                 page={page}
-                                onChangePage={this.handleChangePage(refetch)}
+                                onChangePage={this.handleChangePage(refetch, count)}
                                 rowsPerPage={rowsPerPage}
                             />
                         </div>
@@ -212,5 +212,5 @@ TraineeList.propTypes = {
 
 export default Compose(withStyles(useStyles),
 graphql(GET_TRAINEE,{
-    options: { variables: {skip:0, limit:10}}
+    options: { variables: {skip:0, limit:0}}
 }))(withLoaderAndMessage(TraineeList));
