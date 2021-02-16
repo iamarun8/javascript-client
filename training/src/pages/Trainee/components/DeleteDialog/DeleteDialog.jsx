@@ -26,7 +26,6 @@ class DeleteDialog extends Component {
     };
 
     onDeleteHandler = async (data, openSnackBar) => {
-        const { fetcheddata } = this.props;
         this.setState({
             loading: true,
         })
@@ -39,7 +38,6 @@ class DeleteDialog extends Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
-                fetcheddata();
             });
         } else {
             this.setState({

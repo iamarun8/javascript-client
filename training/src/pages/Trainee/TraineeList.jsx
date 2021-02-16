@@ -9,8 +9,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TableComponent } from '../../components/Table';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
-import callApi from '../../lib/utils/api';
+// import callApi from '../../lib/utils/api';
 import { withLoaderAndMessage } from '../../components/HOC/index';
+import { graphql } from '@apollo/react-hoc';
+import Compose from 'lodash.flowright';
+import { GET_TRAINEE } from './query';
+import { MyContext } from '../../contexts/index';
 
 const useStyles = (theme) => ({
     root: {
@@ -34,11 +38,12 @@ class TraineeList extends React.Component {
             editData: {},
             deleteData: {},
             page: 0,
-            rowsPerPage: 10,
+            rowsPerPage: 6,
             count: 0,
             limit: 50,
             skip: 0,
             dataObj: [[]],
+            refetchData: { }
         };
     }
 
@@ -62,10 +67,15 @@ class TraineeList extends React.Component {
         console.log(data);
     };
 
-    handleChangePage = (event, newPage) => {
-        this.componentDidMount(newPage);
+    handleChangePage = (refetch) => async (event, newPage) => {
+        const { rowsPerPage } = this.state;
+        const refetchData = await refetch({skip: newPage * (rowsPerPage), limit: rowsPerPage })
+        const{  
+                data : {getAllTrainees: { data = [], count } = {} },
+        } = this.props;
         this.setState({
             page: newPage,
+            refetchData: { data, count}
         });
     };
 
@@ -107,32 +117,21 @@ class TraineeList extends React.Component {
         });
     };
 
-    fetchData = () => {
-        const { limit, skip } = this.state;
-        const { setloader, setdataLength } = this.props;
-        callApi(`trainee?skip=${skip}&limit=${limit}`, 'get', {}).then((response) => {
-            if (!response.data) {
-                this.setState({
-                    message: 'An error occured while displaying Trainee',
-                });
-                setloader(false);
-            } else {
-                this.setState({ dataObj: response.data, count: response.count });
-                setloader(false);
-                setdataLength(response.count);
-                return response.data
-            }
-        });
-    }
-
-    componentDidMount = () => {
-        this.fetchData();
-    }
-
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, dataObj, } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, refetchData } = this.state;
         const { classes } = this.props;
-        const { loader, dataLength } = this.props;
+        const { loader, dataLength, setdataLength, setloader } = this.props;
+        const{  
+                data : {getAllTrainees: { data = [], count, totalCount } = {},
+                refetch},
+        } = this.props;
+        const updatedCount = refetchData.count ? refetchData.count : count;
+        const updatedData = refetchData.data ? refetchData.data : data;
+        const updatedTotalCount = refetchData.totalCount || totalCount
+        if(updatedCount){
+            setloader(false);
+            setdataLength(updatedCount);            
+        }
         if(!dataLength) return null; 
         return (
             <>
@@ -144,25 +143,24 @@ class TraineeList extends React.Component {
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose} fetcheddata={this.fetchData}/>
+                            <AddDialog open={open} onClose={this.handleClose}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
-                                fetcheddata={this.fetchData}
+
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
-                                fetcheddata={this.fetchData}
                             />
                             <TableComponent
                                 id="id"
-                                data={dataObj || [[]] }
+                                data={updatedData}
                                 columns={
                                     [
                                         {
@@ -196,9 +194,9 @@ class TraineeList extends React.Component {
                                 order={order}
                                 onSort={this.handleSort}
                                 onSelect={this.handleSelect}
-                                count={dataLength}
+                                count={updatedTotalCount}
                                 page={page}
-                                onChangePage={this.handleChangePage}
+                                onChangePage={this.handleChangePage(refetch)}
                                 rowsPerPage={rowsPerPage}
                             />
                         </div>
@@ -208,8 +206,14 @@ class TraineeList extends React.Component {
         );
     }
 }
+TraineeList.contextType = MyContext;
 TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    data: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
-export default withStyles(useStyles)(withLoaderAndMessage(TraineeList));
+
+export default Compose(withStyles(useStyles),
+graphql(GET_TRAINEE,{
+    options: { variables: {skip:0, limit:6, sort:'name'}, fetchPolicy: "network-only"}
+}))(withLoaderAndMessage(TraineeList));
