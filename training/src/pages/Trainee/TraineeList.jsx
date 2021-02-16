@@ -38,11 +38,12 @@ class TraineeList extends React.Component {
             editData: {},
             deleteData: {},
             page: 0,
-            rowsPerPage: 10,
+            rowsPerPage: 6,
             count: 0,
             limit: 50,
             skip: 0,
             dataObj: [[]],
+            refetchData: { }
         };
     }
 
@@ -66,14 +67,15 @@ class TraineeList extends React.Component {
         console.log(data);
     };
 
-    handleChangePage = (refetch) => (event, newPage) => {
-        console.log('-$$$$$$-handlechangePage')
+    handleChangePage = (refetch) => async (event, newPage) => {
         const { rowsPerPage } = this.state;
+        const refetchData = await refetch({skip: newPage * (rowsPerPage), limit: rowsPerPage })
+        const{  
+                data : {getAllTrainees: { data = [], count } = {} },
+        } = this.props;
         this.setState({
             page: newPage,
-        },()=>{
-            console.log('__',rowsPerPage,'\n__',newPage);
-            // refetch({skip: newPage * (rowsPerPage), limit: rowsPerPage })
+            refetchData: { data, count}
         });
     };
 
@@ -116,17 +118,19 @@ class TraineeList extends React.Component {
     };
 
     render() {
-        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, } = this.state;
+        const { open, order, orderBy, page, rowsPerPage, EditOpen, RemoveOpen, editData, deleteData, refetchData } = this.state;
         const { classes } = this.props;
         const { loader, dataLength, setdataLength, setloader } = this.props;
         const{  
-                data : {getAllTrainees: { data = [], count } = {},
+                data : {getAllTrainees: { data = [], count, totalCount } = {},
                 refetch},
         } = this.props;
-        // console.log('inside traineelist\ndata',data,'\ncount',count);
-        if(count){
+        const updatedCount = refetchData.count ? refetchData.count : count;
+        const updatedData = refetchData.data ? refetchData.data : data;
+        const updatedTotalCount = refetchData.totalCount || totalCount
+        if(updatedCount){
             setloader(false);
-            setdataLength(count);            
+            setdataLength(updatedCount);            
         }
         if(!dataLength) return null; 
         return (
@@ -156,7 +160,7 @@ class TraineeList extends React.Component {
                             />
                             <TableComponent
                                 id="id"
-                                data={data}
+                                data={updatedData}
                                 columns={
                                     [
                                         {
@@ -190,7 +194,7 @@ class TraineeList extends React.Component {
                                 order={order}
                                 onSort={this.handleSort}
                                 onSelect={this.handleSelect}
-                                count={dataLength}
+                                count={updatedTotalCount}
                                 page={page}
                                 onChangePage={this.handleChangePage(refetch)}
                                 rowsPerPage={rowsPerPage}
@@ -211,5 +215,5 @@ TraineeList.propTypes = {
 
 export default Compose(withStyles(useStyles),
 graphql(GET_TRAINEE,{
-    options: { variables: {skip:0, limit:0}}
+    options: { variables: {skip:0, limit:6, sort:'name'}, fetchPolicy: "network-only"}
 }))(withLoaderAndMessage(TraineeList));
