@@ -34,10 +34,10 @@ function TableComponent(props) {
         id, columns, classes, order, orderBy, onSort, onSelect,
         actions, data, count, rowsPerPage, page, onChangePage,
     } = props;
-    console.log('rowPerPage',rowsPerPage, '\npage',page,'\ncount',count);
-    console.log('--TABLE--',data[0]);
+    // console.log('rowPerPage',rowsPerPage, '\npage',page,'\ncount',count);
+    // console.log('--TABLE--',data[0]);
     const paginationData = data[0].slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    console.log('pagination',paginationData,'-----------------------');
+    console.log('pagination',paginationData);
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table}>

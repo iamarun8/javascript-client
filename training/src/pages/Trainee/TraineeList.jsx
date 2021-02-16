@@ -9,7 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TableComponent } from '../../components/Table';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
-import callApi from '../../lib/utils/api';
+// import callApi from '../../lib/utils/api';
 import { withLoaderAndMessage } from '../../components/HOC/index';
 import { graphql } from '@apollo/react-hoc';
 import Compose from 'lodash.flowright';
@@ -67,11 +67,13 @@ class TraineeList extends React.Component {
     };
 
     handleChangePage = (refetch) => (event, newPage) => {
+        console.log('-$$$$$$-handlechangePage')
         const { rowsPerPage } = this.state;
         this.setState({
             page: newPage,
         },()=>{
-            refetch({skip:newPage * (rowsPerPage.length), limit: rowsPerPage.length })
+            console.log('__',rowsPerPage,'\n__',newPage);
+            // refetch({skip: newPage * (rowsPerPage), limit: rowsPerPage })
         });
     };
 
@@ -101,10 +103,6 @@ class TraineeList extends React.Component {
         });
     };
 
-    // componentDidMount() => {
-
-    // }
-
     handleEditClose = () => {
         this.setState({
             EditOpen: false,
@@ -125,6 +123,7 @@ class TraineeList extends React.Component {
                 data : {getAllTrainees: { data = [], count } = {},
                 refetch},
         } = this.props;
+        // console.log('inside traineelist\ndata',data,'\ncount',count);
         if(count){
             setloader(false);
             setdataLength(count);            
@@ -140,7 +139,7 @@ class TraineeList extends React.Component {
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose} refetch={refetch}/>
+                            <AddDialog open={open} onClose={this.handleClose}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
@@ -157,7 +156,7 @@ class TraineeList extends React.Component {
                             />
                             <TableComponent
                                 id="id"
-                                data={data }
+                                data={data}
                                 columns={
                                     [
                                         {
@@ -193,7 +192,7 @@ class TraineeList extends React.Component {
                                 onSelect={this.handleSelect}
                                 count={dataLength}
                                 page={page}
-                                onChangePage={this.handleChangePage(refetch, count)}
+                                onChangePage={this.handleChangePage(refetch)}
                                 rowsPerPage={rowsPerPage}
                             />
                         </div>
