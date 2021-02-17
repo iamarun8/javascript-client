@@ -5,10 +5,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
 import PropTypes from 'prop-types';
 import { MyContext } from '../../../../contexts/index';
-import callApi from '../../../../lib/utils/api';
 
 class DeleteDialog extends Component {
     constructor(props) {
@@ -30,8 +28,10 @@ class DeleteDialog extends Component {
             loading: true,
         })
         const { originalId } = data.data;
-        const response = await callApi(`trainee/${originalId}`, 'delete', {});
+        const {deleteTrainee} = this.props;
+        const response = await deleteTrainee({ variables: { originalId } });
         this.setState({ loading: false});
+        console.log('response--',response);
         if (response !== undefined) {
             this.setState({
                 message: 'Trainee Deleted Successfully ',

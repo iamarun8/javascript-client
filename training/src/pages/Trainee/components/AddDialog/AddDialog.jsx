@@ -5,7 +5,6 @@ import { Email, VisibilityOff, Person } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
 import { MyContext } from '../../../../contexts'
-import callApi from '../../../../lib/utils/api';
 
 const schema = yup.object().shape({
   name: yup.string().trim().required('Name is a required field').min(3),
@@ -118,12 +117,14 @@ class AddDialog extends React.Component {
 
   onClickHandler = async (data, openSnackBar) => {
     const { onClose } = this.props
+    const { createTrainee } = this.props
       this.setState({
         loading: true,
         hasError: true,
       });
-      const {name, email, password, confirmPassword} = data;
-      const response = await callApi('trainee', 'post', {name,email, password, confirmPassword, role: 'trainee'});
+      const {name, email, password} = data;
+      const response = await createTrainee({variables : {name, email, password}});
+      console.log('===',response);
       this.setState({ loading: false });
       if (!response.err) {
         this.setState({

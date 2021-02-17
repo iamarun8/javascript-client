@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import { MyContext } from '../../../../contexts';
-import callApi from '../../../../lib/utils/api';
 
 const useStyles = () => ({
     button_color: {
@@ -93,12 +92,16 @@ class EditDialog extends React.Component {
     }
 
     onEditHandler = async (data, openSnackBar) => {
-        const { handleEditClose, fetcheddata } = this.props
+        const { handleEditClose } = this.props
+        console.log('--props--',this.props)
+        const { id, name, email } = data;
+        const { updateTrainee } = this.props
         this.setState({
             loading: true,
             hasError: true,
         });
-        const response = await callApi('trainee', 'put', {id: data.id, dataToUpdate:{name:data.name, email:data.email}});
+        const response = await updateTrainee({ variables: { id, name, email } });
+        console.log(response);
         this.setState({
             loading: false,
         })
@@ -110,7 +113,6 @@ class EditDialog extends React.Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
-                fetcheddata();
             });
         } else {
             this.setState({
