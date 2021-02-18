@@ -23,36 +23,10 @@ class DeleteDialog extends Component {
         this.setState({ open: false });
     };
 
-    onDeleteHandler = async (data, openSnackBar) => {
-        this.setState({
-            loading: true,
-        })
-        const { originalId } = data.data;
-        const { refetchQueries, deleteTrainee} = this.props;
-        const response = await deleteTrainee({ variables: { originalId } });
-        this.setState({ loading: false});
-        console.log('response--',response);
-        if (response !== undefined) {
-            this.setState({
-                message: 'Trainee Deleted Successfully ',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'success');
-                refetchQueries();
-            });
-        } else {
-            this.setState({
-                message: 'Error While Deleting Trainee',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'error');
-            });
-        }
-    }
-
     render() {
         const { open, onClose, onSubmit, data } = this.props;
         const { loading } = this.state;
+        const { originalId } = data;
         return (
             <Dialog
                 open={open}
@@ -70,8 +44,9 @@ class DeleteDialog extends Component {
                                     color="primary"
                                     variant="contained"
                                     onClick={() => {
-                                        this.onDeleteHandler({ data }, openSnackBar);
-                                        onSubmit({ data });
+                                        onSubmit({
+                                            originalId
+                                        })
                                     }}
                                 > 
                                     {loading && (

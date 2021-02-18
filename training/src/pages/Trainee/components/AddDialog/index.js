@@ -1,1 +1,1 @@
-export { default as AddDialog } from './Wrapper';
+export { default as AddDialog } from './AddDialog';

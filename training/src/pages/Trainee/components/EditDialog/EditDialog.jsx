@@ -91,44 +91,8 @@ class EditDialog extends React.Component {
         return false;
     }
 
-    onEditHandler = async (data, openSnackBar) => {
-        const { handleEditClose } = this.props
-        console.log('--props--',this.props)
-        const { id, name, email } = data;
-        const { refetchQueries, updateTrainee } = this.props
-        this.setState({
-            loading: true,
-            hasError: true,
-        });
-        const response = await updateTrainee({ variables: { id, name, email } });
-        console.log(response);
-        this.setState({
-            loading: false,
-        })
-        if (response !== undefined) {
-            handleEditClose();
-            this.setState({
-                hasError: false,
-                message: 'Trainee Updated Successfully',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'success');
-                refetchQueries();
-            });
-        } else {
-            this.setState({
-                hasError: false,
-                message: 'Error while submitting',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'error');
-            });
-        }
-    }
-
-
     render() {
-        const { Editopen, handleEditClose, data } = this.props;
+        const { Editopen, handleEditClose, data, onSubmit } = this.props;
         const { name, email, error } = this.state;
         const { originalId: id } = data;
         const { loading } = this.state;
@@ -196,7 +160,7 @@ class EditDialog extends React.Component {
                             {({ openSnackBar }) => (
                                 <Button
                                     onClick={() => {
-                                        this.onEditHandler({id, name, email }, openSnackBar);
+                                        onSubmit({id, name, email });
                                     }}
                                     color="primary"
                                     variant="contained"

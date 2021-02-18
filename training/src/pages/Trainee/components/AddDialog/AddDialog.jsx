@@ -115,37 +115,6 @@ class AddDialog extends React.Component {
     return '';
   }
 
-  onClickHandler = async (data, openSnackBar) => {
-    const { onClose } = this.props
-    const { refetchQueries, createTrainee } = this.props
-      this.setState({
-        loading: true,
-        hasError: true,
-      });
-      const {name, email, password} = data;
-      const response = await createTrainee({variables : {name, email, password}});
-      this.setState({ loading: false });
-      if (!response.err) {
-        this.setState({
-          hasError: false,
-          message: 'This is a successfully added trainee message',
-        }, () => {
-          const { message } = this.state;
-          openSnackBar(message, 'success');
-          refetchQueries();
-        });
-      } else {
-        this.setState({
-          hasError: false,
-          message: 'error in submitting',
-        }, () => {
-          const { message } = this.state;
-          openSnackBar(message, 'error');
-        });
-      }
-      onClose();
-    }
-
   formReset = () => {
     this.setState({
       name: '',
@@ -159,7 +128,7 @@ class AddDialog extends React.Component {
 
   render() {
     const {
-      open, onClose, classes, 
+      open, onClose, classes, onSubmit
     } = this.props;
     const { name, email, password, confirmPassword, loading } = this.state;
     const ans = [];
@@ -225,9 +194,9 @@ class AddDialog extends React.Component {
                     color="primary"
                     variant="contained"
                     onClick={() => {
-                      this.onClickHandler({
-                        name, email, password, confirmPassword
-                      }, openSnackBar);
+                      onSubmit({
+                        name, email, password
+                      })
                       this.formReset();
                     }}
                     disabled={this.hasErrors() || loading}

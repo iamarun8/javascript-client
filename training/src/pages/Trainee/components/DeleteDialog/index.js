@@ -1,1 +1,1 @@
-export { default as DeleteDialog } from './Wrapper';
+export { default as DeleteDialog } from './DeleteDialog';
