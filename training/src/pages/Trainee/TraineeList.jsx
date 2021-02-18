@@ -143,20 +143,21 @@ class TraineeList extends React.Component {
                                     ADD TRAINEELIST
                         </Button>
                             </div>
-                            <AddDialog open={open} onClose={this.handleClose}/>
+                            <AddDialog open={open} onClose={this.handleClose} refetchQueries={refetch}/>
                             <br />
                             <EditDialog
                                 Editopen={EditOpen}
                                 handleEditClose={this.handleEditClose}
                                 handleEdit={this.handleEdit}
                                 data={editData}
-
+                                refetchQueries={refetch}
                             />
                             <DeleteDialog
                                 open={RemoveOpen}
                                 onClose={this.handleRemoveClose}
                                 onSubmit={this.handleRemove}
                                 data={deleteData}
+                                refetchQueries={refetch}
                             />
                             <TableComponent
                                 id="id"

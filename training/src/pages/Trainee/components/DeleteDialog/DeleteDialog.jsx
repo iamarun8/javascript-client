@@ -28,7 +28,7 @@ class DeleteDialog extends Component {
             loading: true,
         })
         const { originalId } = data.data;
-        const {deleteTrainee} = this.props;
+        const { refetchQueries, deleteTrainee} = this.props;
         const response = await deleteTrainee({ variables: { originalId } });
         this.setState({ loading: false});
         console.log('response--',response);
@@ -38,6 +38,7 @@ class DeleteDialog extends Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
+                refetchQueries();
             });
         } else {
             this.setState({

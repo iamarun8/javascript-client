@@ -117,14 +117,13 @@ class AddDialog extends React.Component {
 
   onClickHandler = async (data, openSnackBar) => {
     const { onClose } = this.props
-    const { createTrainee } = this.props
+    const { refetchQueries, createTrainee } = this.props
       this.setState({
         loading: true,
         hasError: true,
       });
       const {name, email, password} = data;
       const response = await createTrainee({variables : {name, email, password}});
-      console.log('===',response);
       this.setState({ loading: false });
       if (!response.err) {
         this.setState({
@@ -133,6 +132,7 @@ class AddDialog extends React.Component {
         }, () => {
           const { message } = this.state;
           openSnackBar(message, 'success');
+          refetchQueries();
         });
       } else {
         this.setState({

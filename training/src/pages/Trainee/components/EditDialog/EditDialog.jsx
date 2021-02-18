@@ -95,7 +95,7 @@ class EditDialog extends React.Component {
         const { handleEditClose } = this.props
         console.log('--props--',this.props)
         const { id, name, email } = data;
-        const { updateTrainee } = this.props
+        const { refetchQueries, updateTrainee } = this.props
         this.setState({
             loading: true,
             hasError: true,
@@ -113,6 +113,7 @@ class EditDialog extends React.Component {
             }, () => {
                 const { message } = this.state;
                 openSnackBar(message, 'success');
+                refetchQueries();
             });
         } else {
             this.setState({
