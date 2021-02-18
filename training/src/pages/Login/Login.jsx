@@ -98,6 +98,7 @@ class Login extends React.Component {
 
     onClickHandler = async (data, openSnackBar) => {
         const { loginUser } = this.props;
+        console.log('--IN--',this.props);
         const { email, password } = data;
         console.log('loginUser----', loginUser);
         this.setState({

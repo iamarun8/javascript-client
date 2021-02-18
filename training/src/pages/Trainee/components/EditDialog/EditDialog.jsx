@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import { MyContext } from '../../../../contexts';
-import callApi from '../../../../lib/utils/api';
 
 const useStyles = () => ({
     button_color: {
@@ -92,40 +91,8 @@ class EditDialog extends React.Component {
         return false;
     }
 
-    onEditHandler = async (data, openSnackBar) => {
-        const { handleEditClose, fetcheddata } = this.props
-        this.setState({
-            loading: true,
-            hasError: true,
-        });
-        const response = await callApi('trainee', 'put', {id: data.id, dataToUpdate:{name:data.name, email:data.email}});
-        this.setState({
-            loading: false,
-        })
-        if (response !== undefined) {
-            handleEditClose();
-            this.setState({
-                hasError: false,
-                message: 'Trainee Updated Successfully',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'success');
-                fetcheddata();
-            });
-        } else {
-            this.setState({
-                hasError: false,
-                message: 'Error while submitting',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'error');
-            });
-        }
-    }
-
-
     render() {
-        const { Editopen, handleEditClose, data } = this.props;
+        const { Editopen, handleEditClose, data, onSubmit } = this.props;
         const { name, email, error } = this.state;
         const { originalId: id } = data;
         const { loading } = this.state;
@@ -193,7 +160,7 @@ class EditDialog extends React.Component {
                             {({ openSnackBar }) => (
                                 <Button
                                     onClick={() => {
-                                        this.onEditHandler({id, name, email }, openSnackBar);
+                                        onSubmit({id, name, email });
                                     }}
                                     color="primary"
                                     variant="contained"

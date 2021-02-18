@@ -5,7 +5,6 @@ import { Email, VisibilityOff, Person } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
 import { MyContext } from '../../../../contexts'
-import callApi from '../../../../lib/utils/api';
 
 const schema = yup.object().shape({
   name: yup.string().trim().required('Name is a required field').min(3),
@@ -116,35 +115,6 @@ class AddDialog extends React.Component {
     return '';
   }
 
-  onClickHandler = async (data, openSnackBar) => {
-    const { onClose } = this.props
-      this.setState({
-        loading: true,
-        hasError: true,
-      });
-      const {name, email, password, confirmPassword} = data;
-      const response = await callApi('trainee', 'post', {name,email, password, confirmPassword, role: 'trainee'});
-      this.setState({ loading: false });
-      if (!response.err) {
-        this.setState({
-          hasError: false,
-          message: 'This is a successfully added trainee message',
-        }, () => {
-          const { message } = this.state;
-          openSnackBar(message, 'success');
-        });
-      } else {
-        this.setState({
-          hasError: false,
-          message: 'error in submitting',
-        }, () => {
-          const { message } = this.state;
-          openSnackBar(message, 'error');
-        });
-      }
-      onClose();
-    }
-
   formReset = () => {
     this.setState({
       name: '',
@@ -158,7 +128,7 @@ class AddDialog extends React.Component {
 
   render() {
     const {
-      open, onClose, classes, 
+      open, onClose, classes, onSubmit
     } = this.props;
     const { name, email, password, confirmPassword, loading } = this.state;
     const ans = [];
@@ -224,9 +194,9 @@ class AddDialog extends React.Component {
                     color="primary"
                     variant="contained"
                     onClick={() => {
-                      this.onClickHandler({
-                        name, email, password, confirmPassword
-                      }, openSnackBar);
+                      onSubmit({
+                        name, email, password
+                      })
                       this.formReset();
                     }}
                     disabled={this.hasErrors() || loading}

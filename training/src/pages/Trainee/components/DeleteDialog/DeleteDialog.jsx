@@ -5,10 +5,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
 import PropTypes from 'prop-types';
 import { MyContext } from '../../../../contexts/index';
-import callApi from '../../../../lib/utils/api';
 
 class DeleteDialog extends Component {
     constructor(props) {
@@ -25,33 +23,10 @@ class DeleteDialog extends Component {
         this.setState({ open: false });
     };
 
-    onDeleteHandler = async (data, openSnackBar) => {
-        this.setState({
-            loading: true,
-        })
-        const { originalId } = data.data;
-        const response = await callApi(`trainee/${originalId}`, 'delete', {});
-        this.setState({ loading: false});
-        if (response !== undefined) {
-            this.setState({
-                message: 'Trainee Deleted Successfully ',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'success');
-            });
-        } else {
-            this.setState({
-                message: 'Error While Deleting Trainee',
-            }, () => {
-                const { message } = this.state;
-                openSnackBar(message, 'error');
-            });
-        }
-    }
-
     render() {
         const { open, onClose, onSubmit, data } = this.props;
         const { loading } = this.state;
+        const { originalId } = data;
         return (
             <Dialog
                 open={open}
@@ -69,8 +44,9 @@ class DeleteDialog extends Component {
                                     color="primary"
                                     variant="contained"
                                     onClick={() => {
-                                        this.onDeleteHandler({ data }, openSnackBar);
-                                        onSubmit({ data });
+                                        onSubmit({
+                                            originalId
+                                        })
                                     }}
                                 > 
                                     {loading && (
