@@ -16,6 +16,7 @@ import { GET_TRAINEE } from './query';
 import { MyContext } from '../../contexts/index';
 import { Mutation } from "@apollo/react-components";
 import { UPDATE_TRAINEE, CREATE_TRAINEE, DELETE_TRAINEE } from "./mutation";
+import { DELETED_TRAINEE_SUB, UPDATED_TRAINEE_SUB } from "./Subscription";
 
 
 const useStyles = (theme) => ({
@@ -195,6 +196,49 @@ class TraineeList extends React.Component {
         }
       );
     }
+  };
+
+  componentDidMount = () => {
+    const { data: { subscribeToMore } } = this.props;
+
+    subscribeToMore({
+      document: UPDATED_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        const { getAllTrainees: { data } } = prev;
+        const { data: { traineeUpdated } } = subscriptionData;
+        const updatedRecords = [...data].map(records => {
+          if (records.originalId !== traineeUpdated[0].originalId) {
+            return { ...data, ...traineeUpdated };
+          }
+          return data;
+        });
+        return {
+          getAllTrainees: {
+            ...prev.getAllTrainees,
+            ...prev.getAllTrainees.totalCount,
+            data: updatedRecords,
+          }
+        };
+      }
+    });
+
+    subscribeToMore({
+      document: DELETED_TRAINEE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) return prev;
+        const { getAllTrainees: { data } } = prev;
+        const { data: { traineeDeleted } } = subscriptionData;
+        const updatedRecords = [...data].filter( records => records.originalId !== traineeDeleted.data);
+        return {
+          getAllTrainees: {
+            ...prev.getAllTrainees,
+            ...(prev.getAllTrainees.totalCount - 1),
+            data: updatedRecords
+          }
+        };
+      }
+    });
   };
 
   render() {
