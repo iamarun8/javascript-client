@@ -400,7 +400,7 @@ TraineeList.contextType = MyContext;
 TraineeList.propTypes = {
     match: PropTypes.object.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
-    data: PropTypes.arrayOf(PropTypes.string).isRequired,
+    data: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default Compose(withStyles(useStyles),

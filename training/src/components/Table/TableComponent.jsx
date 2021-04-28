@@ -99,7 +99,7 @@ function TableComponent(props) {
 
 TableComponent.propTypes = {
     id: PropTypes.string.isRequired,
-    data: PropTypes.arrayOf(PropTypes.object),
+    data: PropTypes.objectOf(PropTypes.object),
     columns: PropTypes.arrayOf(PropTypes.object).isRequired,
     actions: PropTypes.arrayOf(PropTypes.object).isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -115,6 +115,6 @@ TableComponent.propTypes = {
 TableComponent.defaultProps = {
     order: 'asc',
     orderBy: '',
-    data:[]
+    data:{}
 };
 export default withStyles(useStyles)(TableComponent);
