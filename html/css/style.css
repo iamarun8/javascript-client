@@ -1,0 +1,36 @@
+.main {
+  margin: 100px;
+  box-shadow: 10px 10px 12px gray;
+  font-size: 20px;
+}
+.flex-item {
+  padding-left: 10px;
+  text-align: left;
+  line-height: 50px;
+}
+.flex-container {
+  border: 0.1px solid #FFE4E1;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+.expand1 {
+  flex-grow: 1;
+}
+.expand2 {
+  flex-grow: 3;
+}
+.close {
+  padding: 20px;
+}
+.Bcolor {
+  background-color: #E6E6FA;
+}
+ul.breadcrumb li {
+  display: inline;
+  font-size: 20px;
+}
+ul.breadcrumb li+li:before {
+  padding: 8px;
+  color: black;
+}

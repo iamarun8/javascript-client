@@ -1,0 +1,272 @@
+body {
+    background-image: url('../../images/background.jpg');
+    border: transparent solid 1px;
+  }
+  
+  .co-container {
+    display: flex;
+    flex-direction: column;
+    background-color:grey;
+    padding: 1px;
+    margin: 10%;
+    box-shadow: 10px 5px 5px gray;
+  }
+  .co-checkout--container1 {
+    flex: 1;
+    border: 1px;
+    margin: 1px;
+    display: flex;
+    line-height: 30px;
+    background-color:white;
+  }
+  .co-item--checkout {
+    flex: 1;
+    display: flex;
+    margin-top: 15px;
+    margin-left: 10px;;
+    margin-right: 0.2%;
+    justify-content: space-between;
+  }
+  .co-checkout1 {
+    display: inline;
+    flex:5;
+  }
+  ul.co-breadcrumb li {
+    display: inline;
+    font-size: 17px;
+  }
+  ul.co-breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+  }
+  .co-close {
+    padding: 20px;
+  }
+  .co-payment--container2 {
+    flex: 1;
+    display: flex;
+    padding: 1px;
+    margin: 1px;
+    background-color: white;
+  }
+  .co-flex--payment {
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+    background-color:white;
+  }
+  
+  .co-wallet p{
+    margin-left: 10px;
+  }
+  .co-hover{
+    display: inline-block;
+    margin: 20px;
+  }
+  
+  img {
+    width: 70%;
+  }
+  .co-hover:hover {
+    box-shadow: 0 0 0 7px lightgray;
+    background-color: lightgray;
+  }
+  .co-flex--img {
+    display: inline-flex;
+    margin-top: 20px;
+  }
+  .co-img--wallet:hover {
+    opacity: .5;
+  }
+  .co-img--wallet {
+    margin-left: 25px;
+  }
+  .co-caption {
+    font-size: small;
+    margin-left: 25px;
+  }
+  
+  .co-newcard-p p {
+    margin-left: 10px;
+  }
+
+  .co-newCard{
+    max-width: 350px;
+    margin: 10px;
+    margin-top: 5%;
+    margin-left: 25%;
+    margin-right: 15%;
+    margin-bottom: 15%;
+    height: 10%;
+    text-align: center;
+  }
+ 
+  #cardnum,#name{
+    padding: 2%;
+    width: 70%;
+    height: 50%;
+    margin-left:5%;
+    margin-right: 5%;
+}
+#exp{
+  padding: 2%;
+  width: 32%;
+  height: 50%;
+  margin-left: 10%;
+}
+#cvv{
+  padding: 2%;
+  width: 32%; 
+  height: 50%;
+  margin-right: 10%;
+}
+#button{
+  background-color: 	green;
+  margin-left: 5%;
+  margin-right: 5%;
+  padding: 3%;
+  width: 75%;
+  size: 90px;
+  border: 1px gray;
+  color: white;
+}
+  .co-cartbackground {
+    display: flex;
+    flex:2;
+    flex-grow: 1;
+    position: relative;
+    background-color: rgb(252, 252, 252);
+    width: 40%;
+  }
+
+
+  .co-first {
+  margin-left: 2%;
+  margin-top: 2%;
+  flex: auto;
+  height: 0%;
+  }
+  .co-item {
+    display: flex;
+    flex-direction: row;
+    flex: 2;
+  }
+  .co-product {
+    flex: 1;
+  }
+
+  .co-item--image {
+    margin-top: 2px;
+    border: 5px solid grey;
+    width: 50px;
+    height: 50px;
+    }
+  .co-amount {
+    flex: 6;
+    margin:0%;
+    margin-left: 2%;
+    font-size: medium;
+    }
+    
+  div.co-amount {
+    margin-top: 0%;
+    text-align: justify;
+  }
+
+.co-product {
+  margin: 0%;
+  margin-left: 1%;
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  }
+  
+  .co-price {
+  flex: 1;
+  margin: 0%;
+  position: relative;
+  margin-right: 2%;
+  font-size: 12px;
+  text-align: right;
+  }
+  .footerpart {
+    margin-top: 15%;
+    margin-left: 2%;
+    margin-bottom: 3%;
+    flex: auto;
+    }
+  summary.co-product {
+    margin-left: 1%;
+    flex: 1;
+    text-align: left;
+    font-size: 10px;
+  }  
+
+  @media screen and (min-width:992px)
+  {
+    .co-container{
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+    .co-payment--container2{
+      flex: 3;
+
+    }
+    .co-cartbackground{
+      display: flex;
+      flex: 2;
+    }
+  }
+@media screen and (max-width:992px)
+{
+  .co-container{
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+}
+
+@media screen and (min-width:768px) and (max-width:992px)
+{
+  .co-payment--container2{
+    flex: 1;
+  }
+  .co-cartbackground{
+    flex: 1;
+  }
+}
+@media screen and (max-width:600px){
+.co-payment--container2{
+  flex-direction: column-reverse;
+}
+.co-cartbackground{
+  width: 100%;
+}
+.co-flex--payment{
+  width: 100%;
+}
+
+}
+@media screen and (max-width:768px) 
+{
+.co-checkout1{
+  display: none;
+}
+.co-flex--payment{
+  width: 100%;
+}
+.co-cartbackground{
+  width: 100%;
+}
+}
+@media screen and (max-width:400px)
+{
+  .co-flex--img{
+    display: flex;
+    flex-direction: column;
+  }
+  img {
+    width: 78%;
+    margin: 25px;
+    }
+}
